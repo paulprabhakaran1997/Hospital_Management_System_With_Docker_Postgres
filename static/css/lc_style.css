@@ -1,0 +1,196 @@
+.hide
+{
+    display:none
+}
+
+/* Placeholder Color Change */
+
+::placeholder { 
+    color: rgb(196, 194, 194) !important;
+  }
+
+
+/* Datatable Header Size Fix */
+
+.dataTables_scrollHeadInner{
+    width:100% !important;
+}
+.dataTables_scrollHeadInner table{
+    width:100% !important;
+}
+
+
+/* input number icon hide */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* Doctor Checkup Page Patient List Card View */
+
+.PL_Card {
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 10%), 0 4px 10px 0 rgb(0 0 0 / 10%);
+}
+
+.PL_Card:hover {
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    transform: scale(1.03);
+}
+
+
+@media screen and (max-width: 767px) {
+    .sidebar_content {
+      width : 95% !important
+    }
+  }
+@media screen and (min-width: 768px) {
+    .sidebar_content {
+      width : 60% !important
+    }
+  }
+
+  .invoices-settings-btn{
+    flex-direction: column !important;
+  }
+
+
+
+
+.borders{
+  border: 2px solid rgb(0, 0, 0);
+  padding: 20px;
+
+ 
+}
+.address{
+  display: block;
+  text-align: center;
+  align-items: center;
+
+}
+
+.pull-right{
+  float:right;
+}
+
+
+.select2-container--open
+{
+  z-index: 9999;
+}
+
+.pointer {cursor: pointer;}
+
+
+
+.profile-pic {
+  width: 200px;
+  max-height: 200px;
+  display: inline-block;
+}
+
+.file-upload {
+  display: none;
+}
+
+.circle {
+  border-radius: 100% !important;
+  overflow: hidden;
+  width: 128px;
+  height: 128px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: absolute;
+  top: 72px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.p-image {
+  position: absolute;
+  top: 167px;
+  right: 30px;
+  color: #666666;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.p-image:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+.upload-button {
+  font-size: 1.2em;
+}
+
+  .upload-button:hover {
+    transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    color: #999;
+}
+
+.typeahead.dropdown-menu {
+  width: 100%;
+  /* max-width: 375px; */
+  min-width: 15rem;
+  position: inherit;
+}
+.typeahead.dropdown-menu{
+  padding: 0rem 0;
+}
+
+.typeahead .dropdown-item {
+  background: #ffffff;
+  border: 2px solid #ededed;
+  margin-bottom: 0px;
+  border-radius: 5px;
+}
+
+/* Upload Reports Section */
+
+.uploadReportsContainer
+{
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) ;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+
+/* Track */
+
+
+html::-webkit-scrollbar-track{
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 0px;
+}
+
+
+/* Handle */
+
+html::-webkit-scrollbar-thumb {
+  background: #5f6990;
+  border-radius: 0px;
+}
+
+
+/* Handle on hover */
+html::-webkit-scrollbar-thumb:hover {
+  background: #b6bddc;
+}
+
+/* .modal-backdrop{
+  z-index: 9999;
+}
+.modal {
+  z-index: 10001;
+} */
+
+
+table tfoot {
+  display: table-row-group;
+}

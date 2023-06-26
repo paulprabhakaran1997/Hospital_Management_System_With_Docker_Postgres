@@ -1,0 +1,195 @@
+{% extends 'base.html' %} 
+
+{% load static %} 
+
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="PatientXrayData" data-val="{{ patientxrayreportdata }}">
+    <input type="hidden" id="PatientData" data-val="{{ patientdata }}">
+    <input type="hidden" id="Xray-List-Data" data-val="{{ xraydata }}">
+
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Xray Test Report</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Xray Test Report</li>
+                </ul>
+            </div>
+            <div class="col-auto ">
+                <a href="{% url 'xray_from_appointment' %}" class="btn btn-primary me-1 ">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            <div class="col-auto printBtnSection ">
+                <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold printBtn DownloadReport">
+                    <i class="fas fa-print"></i> Print
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row PatientTesting_PrintView ">
+        
+        <div class="row justify-content-center " style="width:100%">
+            <div class="col-xl-10">
+                <div class="card">
+
+                    <div class="card-body canvas_div_pdf print_section">
+                        <div class="invoice-item">
+                            <div class="row">
+                                <div class="row" style="width: 100%;">
+                                     
+                                    <div class="col-md-12 mx-auto d-flex justify-content-center">
+                                        <div class="print_logo">
+                                            <img src="/media/{{ configuration.hospital_logo }}" alt="Logo" style="width: 150px;">
+                                        </div> 
+                                        <div class="print_contact text-center">
+                                            <h2 class="hospital_name mb-0">{{ configuration.hospital_name }}</h2>
+                                            <h4 class="hospital_slogan"> ({{ configuration.hospital_slogan }})</h4>
+                                            <h6 class="hospital_address mb-1"> {{ configuration.hospital_address1 }}</h6>
+                                            <h6 class="hospital_address mb-1"> {{ configuration.hospital_address2 }}-{{ configuration.hospital_pincode }}</h6>
+                                            <h6 class=""> 
+                                                <span class="hospital_phone">Ph: {{ configuration.hospital_phone }},</span> 
+                                                <span class="hospital_email">E-Mail: {{ configuration.hospital_email }}</span> 
+                                            </h6>
+                                        </div>
+                                            
+                                       
+                                    </div>                               
+                                </div>
+    
+                            </div>
+                        </div>
+    
+                        <div class="invoice-item" style="background: #f7f7ff;border: 1px solid #efefff;border-radius: 10px;">
+                            <div class="row m-0">
+                                <div class="col-md-6" style="width: 80%;">
+                                    
+                                    <div class="invoice-info pb-2 pt-2 mb-0" style="width: 100%;">
+                                        <p class="invoice-details invoice-details-two" style="width: 100%;">
+                                            <strong class="customer-text mb-1">Report To</strong>
+                                            &emsp;ID: <strong><span class="patient_ID"></span></strong> <br>
+                                            &emsp;Name: <strong><span  class="patient_Name"></strong></span> <br>
+                                            &emsp;Age & Gender: <strong><span class="patient_Age"></span>Yrs / <span class="patient_Gender"></span></strong><br>
+                                            <strong>&emsp;Doctor Name: <span class="patient_Doctor"></span></strong>
+                                        </p>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="col-md-6" style="width: 20%;">
+                                  
+                                    <div class="invoice-details">
+                                        <strong class="customer-text mb-1">&nbsp;</strong>
+                                        <p>Date: <strong><span class="testing_Date"></span></strong><br>
+                                           Test ID: <strong><span class="testing_id"></span></strong><br>                                        
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+    
+                        <div class="invoice-item-box mx-auto mb-2">
+                            <h5 class="mb-0 text-center">X-Ray Report</h5>
+                        </div>
+
+                        <div class="invoice-item invoice-table-wrap">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="table-responsive">
+                                        <table class="invoice-table table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>X-Ray Details</th>
+                                                    <th class="text-end">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="Xray-Test-Details"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-lg-6 col-md-6" style="width: 50%;">
+                                  
+                                </div>
+                                <div class="col-lg-6 col-md-6" style="width: 50%;">
+                                    <div class="invoice-total-card">
+                                        <div class="invoice-total-box">
+                                            
+                                            <div class="invoice-total-footer border-0">
+                                                <h4>Total Amount <span class="Xray-Payment-Total">0</span></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+            
+    </div>
+
+
+</div>
+
+{% endblock %}{% block extra_css %}
+<style>
+    .invoice-item-box {
+        float: none;
+        width: 50%;
+    }
+     td, tfoot, th, thead, tr{
+        border-width: 1px;
+        padding: 3px 5px;
+    }
+    th{
+        text-align: center;
+    }
+    .GroupName{
+        font-weight: 800;
+    }
+
+    .print_section .hospital_name{
+        font-size: 50px;
+        color: red;
+        font-weight: 800;
+        text-shadow: -1px -1px 0 #e1e0e0, 1px -1px 0 #e1e0e0, -1px 1px 0 #e1e0e0, 1px 1px 0 #e1e0e0;
+    }
+
+    .print_section .hospital_slogan{
+        color: #0206bf;
+    }
+    .print_section .hospital_address{
+        color: #2024dd;
+    }
+    .print_section .hospital_phone, .print_section .hospital_email{
+        color: #ff0000;
+    }
+    
+</style>
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/patient_xray_report.js' %}" type="text/javascript"></script>
+
+{% endblock %}

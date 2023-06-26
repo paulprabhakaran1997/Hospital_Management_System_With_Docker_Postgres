@@ -1,0 +1,162 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block forms_nav %} active {% endblock %} 
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="FormData" data-url="{% url 'forms_data' %}">
+
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Fitnees Form</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Fitnees Form</li>
+                </ul>
+            </div>
+            <div class="col-auto addNewBtnSection">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn ">
+                    <i class="fas fa-plus"></i> New 
+                </a>
+            </div>
+
+            <div class="col-auto backBtnSection hide">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <section class="FormsDTSection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="FormsDT">
+                                <thead class="thead-light">
+                                </thead>
+                                <tbody>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="FormCreateSection hide">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Enter Details</h4>
+                        <form id="addForms" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+						
+                            <input type="hidden" id="FormsId" name="FormsId" value="0" />
+                            
+                            <div class="row form-group">
+
+                                <div class="col-md-3">
+                                    <label for="prefix" class="col-form-label input-label">Prefix</label>
+                                    <select class="form-control" name="prefix" id="prefix" required>
+                                        <option value=""></option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Ms">Ms</option>
+                                        <option value="Mrs">Mrs</option>
+                                    </select>                                    
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="name" class="col-form-label input-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="Name" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="phone" class="col-form-label input-label">Gender</label>
+                                    <select class="form-control" id="gender" name="gender" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="father_name" class="col-form-label input-label">Father Name</label>
+                                    <input type="text" class="form-control" name="father_name" id="father_name" placeholder="Father Name" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="dob" class="col-form-label input-label">D.O.B</label>
+                                        <input type="date" class="form-control" value='{% now "Y-m-d" %}' name="dob" id="dob" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="village" class="col-form-label input-label">Village</label>
+                                    <input type="text" class="form-control" name="village" id="village" placeholder="Village" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="district" class="col-form-label input-label">District</label>
+                                    <input type="text" class="form-control" name="district" id="district" placeholder="district" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="state" class="col-form-label input-label">State</label>
+                                    <input type="text" class="form-control" name="state" id="state" placeholder="state" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="pincode" class="col-form-label input-label">Pincode</label>
+                                    <input type="text" class="form-control" name="pincode" id="pincode" placeholder="pincode" required>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label for="purpose_of" class="col-form-label input-label">Purpose of</label>
+                                    <input type="text" class="form-control" name="purpose_of" id="purpose_of" placeholder="purpose_of" required>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="date" class="col-form-label input-label">Date</label>
+                                        <input type="date" class="form-control" value='{% now "Y-m-d" %}' name="date" id="date" required>
+                                </div>
+
+                            </div>
+                            
+
+    
+    
+
+    
+    
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/manage_forms.js' %}" type="text/javascript"></script>
+
+
+{% endblock %}

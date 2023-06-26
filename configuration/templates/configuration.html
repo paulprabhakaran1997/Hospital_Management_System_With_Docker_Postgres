@@ -1,0 +1,152 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block Configuration_nav %} active {% endblock %}
+{% block main_content %}
+
+<div class="content container-fluid">
+
+    <div class="col-xl-12 col-md-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="fa fa-ambulance"></i> Hospital Configuration
+                </h5>
+            </div>
+            <div class="card-body">
+
+                <form action="." method="POST" enctype="multipart/form-data">{% csrf_token %}                
+                    <input type="hidden" id="configuration_id" name="configuration_id" value="0" />
+                   
+                    <div class="row form-group">
+                        
+                        <div class="col-md-12 col-lg-12 text-center">
+                            <label for="name" class="col-md-5 col-form-label input-label mx-auto">Hospital Logo</label>
+                            
+                            <div class="d-flex align-items-center justify-content-center">
+                                <label class="avatar avatar-xxl profile-cover-avatar m-0" for="edit_img">
+                                    <input class="file-upload" name="hospital_logo" id="edit_img" type="file" accept="image/*" value="{{ configuration.hospital_logo }}"/>
+                                    {% if configuration.hospital_logo %}
+                                        <img id="avatarImg" class="avatar-img" src="/media/{{ configuration.hospital_logo }}" alt="Hospital Logo" >
+                                    {% else %}
+                                        <img id="avatarImg" class="avatar-img" src="{% static 'img/default-logo.png' %}" alt="Hospital Logo" >
+                                    {% endif %}
+                                    <span class="avatar-edit upload-button"><i data-feather="edit-2" class="avatar-uploader-icon shadow-soft"></i></span>
+                                </label>
+                            </div>     
+                        </div>                       
+                        
+
+                        <div class="col-md-4 col-lg-4">
+                            <label for="name" class="col-form-label input-label">Hospital Name</label>
+                            <input type="text" class="form-control" id="name" name="hospital_name" placeholder="Grace Hospital" value="{{ configuration.hospital_name }}">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label for="website" class="col-form-label input-label">Website</label>
+                            <input type="text" class="form-control" id="website" name="hospital_website" placeholder="Enter Your Hospital Website" value="{{ configuration.hospital_website }}">
+                        </div>
+                        
+                    
+                        <div class="col-md-4 col-lg-4">
+                            <label for="email" class="col-form-label input-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="hospital_email" placeholder="Enter Your Email Address" value="{{ configuration.hospital_email }}">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label for="phone" class=" col-form-label input-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" name="hospital_phone" placeholder="98765 43210" value="{{ configuration.hospital_phone }}">
+                        </div>
+                                                  
+                        <div class="col-md-4 col-lg-4">
+                            <label for="slogan" class=" col-form-label input-label">Slogan</label>
+                            <input type="text" class="form-control" id="slogan" name="hospital_slogan" placeholder="We Care For You..." value="{{ configuration.hospital_slogan }}">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label for="greetings_text" class=" col-form-label input-label">Greetings Text</label>
+                            <input type="text" class="form-control" id="greetings_text" name="hospital_greetings" placeholder="Greetings Text" value="{{ configuration.hospital_greetings }}">
+                        </div>
+                        
+                        <div class="col-md-4 col-lg-4">
+                            <label for="address_1" class=" col-form-label input-label">Address Line-1</label>
+                            <input type="text" class="form-control" id="address_1" name="hospital_address1" placeholder="Address Line-1" value="{{ configuration.hospital_address1 }}">
+                        </div>
+                        
+                        <div class="col-md-4 col-lg-4">
+                            <label for="address_2" class=" col-form-label input-label">Address Line-2</label>
+                            <input type="text" class="form-control" id="address_2" name="hospital_address2" placeholder="Address Line-1" value="{{ configuration.hospital_address2 }}">
+                        </div>
+
+                        <div class="col-md-4 col-lg-4">
+                            <label for="pincode" class=" col-form-label input-label">PINCODE</label>
+                            <input type="text" class="form-control" id="pincode" name="hospital_pincode" placeholder="pincode" value="{{ configuration.hospital_pincode }}">
+                        </div>
+
+                        
+                        <div class="col-md-4 col-lg-4">
+                            <label for="gst_number" class=" col-form-label input-label">GST Number</label>
+                            <input type="text" class="form-control" id="gst_number" name="hospital_gst" placeholder="GST Number" value="{{ configuration.hospital_gst }}">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label for="addressline2" class=" col-form-label input-label">Hospital Registration Number</label>
+                            <input type="text" class="form-control" id="hospital_registeration_number" name="hospital_registeration_number" placeholder="Hospital Registration Number" value="{{ configuration.hospital_registeration_number }}">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label for="druglicense_number" class=" col-form-label input-label">Drug License Number</label>
+                            <input type="text" class="form-control" id="druglicense_number" name="hospital_druglicense_number" placeholder="Drug License Number" value="{{ configuration.hospital_druglicense_number }}">
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <label for="default_doctorfees" class=" col-form-label input-label">Default Doctor Fees</label>
+                            <input type="text" class="form-control" id="default_doctorfees" name="default_doctorfees" placeholder="Doctor Fees" value="{{ configuration.default_doctorfees }}">
+                        </div>
+                        
+                    </div>
+                    
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Save Configuration</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
+{% block extra_css %}
+<style>
+    .avatar-img{
+        border: 5px solid #e9e8e8;
+
+    }
+</style>
+{% endblock %} 
+{% block extra_js %}
+
+
+<script>
+    $(document).ready(function () {
+
+        var readURL = function (input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#avatarImg').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        $(".file-upload").on('change', function () {
+            readURL(this);
+        });
+
+        $(".upload-button").on('click', function () {
+            //$(".file-upload").click();
+        });
+    });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,629 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block doctor_checkup_nav %} active {% endblock %}
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <div class="row align-items-center">
+        <div class="col-12">
+            <ul class="nav nav-pills justify-content-end" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="doctor_checkup" data-toggle="tab" href="#Patients_forTestTake">O.P Patients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  data-toggle="tab" href="#Patients_history">O.P History</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <section>
+        <div class="tab-content">
+
+
+            <div class="Patients_forTestTake tab-pane active" id="Patients_forTestTake">
+
+                <input type="hidden" id="GetAppointmentData_DTUrl" data-url="{% url 'get_appointmentdata_dt' %}">
+
+                <input type="hidden" id="Patient_HistoryURL" data-url="{% url 'get_patient_history' %}">
+                <input type="hidden" id="Doctor_Name" value="0">
+
+                <div class="row align-items-center">
+            
+                    <div class="col">
+                        <h3 class="page-title">Doctor Checkup</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                                </i>Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Doctor Checkup</li>
+                        </ul>            
+                    </div>
+                    
+                    <div class="col-auto backBtnSection hide">
+                        <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </div>
+            
+            
+                <section class="AppointedPatientList_CardSection">
+                    <div class="row  doctor_checkup_data">
+                        {% for obj in appointmentdata %}
+                        <!--   <div class="col-md-3 d-flex">
+                            <div class="card PL_Card flex-fill">
+                                <div class="card-header text-center">
+                                    <span class="badge badge-pill badge-primary counter_badge">{{ forloop.counter }}</span>
+                                    <h5 class="card-title mb-0">{{ obj.patient_name }}</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <p class="card-text">{{ obj.reason }}</p>
+                                    <a class="card-link cardViewBtn" data-val="{{ obj }}" href="javascript:void(0)">View</a>
+                                </div>
+                            </div>
+                        </div> -->
+                    {% endfor %}
+
+                        <!-- {% for obj in appointmentdata %}
+                        <div class="col-md-3 d-flex">
+                            <div class="card invoices-grid-card w-100">
+                                <div class="card-header d-flex">
+                                    <a href="javascript:void(0);" class="invoice-grid-link">
+                                        <h5 class="mb-0"><strong>O.P ID<span class="text-danger"> #{{ forloop.counter }}</span></a></strong></h5>
+                                    
+                                </div>
+                                <div class="card-middle">
+                                    <h2 class="card-middle-avatar row w-100">
+                                        <div class="col-md-2 p-0">
+                                            <a href="javascript:void(0);"><img class="avatar avatar-sm me-2 avatar-img rounded-circle"
+                                                src="{% static 'img/patient-icon.png' %}" alt="User Image">
+                                             </a>
+                                        </div>
+                                        <div class="col-md-10 row">
+                                            <div class="col-md-12">
+                                                <h5 class="mb-0">{{ obj.patient_name }}</h5>
+                                            </div>                                            
+                                            <div class="col-md-12 mt-2">
+                                                <small>{{ obj.patient_age }} Yrs / {{ obj.patient_gender }}</small>
+                                            </div>
+                                         
+                                        </div>
+                                       
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <h6><i class="fa fa-exclamation-circle" data-bs-toggle="tooltip" data-bs-original-title="Reason" ></i> Reason</h6>
+                                            {{ obj.reason }}
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row align-items-center">
+                                        <div class="text-end">
+                                            <a class="card-link cardViewBtn badge bg-primary-dark " data-val="{{ obj }}" href="javascript:void(0)">
+                                                <span class="badge">View Appointment</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        {% endfor %} -->
+                    </div>
+                </section>
+            
+                <section class="Doctor_Prescription_Section hide">
+                    <div class="row">
+
+                        <div class="col-md-9">
+                            <div class="card" style="border:1px solid #e7ebef">
+                                <div class="card-header">
+                                    <h4 class="card-title">Patient information</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form id="DoctorPrescriptionForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                        <input type="hidden" id="appointmentId" name="appointmentId" />
+                                        <input type="hidden" name="patientId" id="patientId">
+
+                                        <input type="hidden" name="pos_id" id="pos_id">
+                                    
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <h5>Patient Name : <span class="patientInfoText " id="appointedPatientName"></span></h5>
+                                            </div>
+                                    
+                                            <div class="col-md-6">
+                                                <h5>Age & Gender : <span class="patientInfoText" id="appointedPatientAge"></span> / <span class="patientInfoText " id="appointedPatientGender"></span></h5>
+                                            </div>
+                                    
+                                            </div>
+                                    
+                                        <div class="invoice-item-box">
+                                            <div class="row health_checkup_details_section">
+
+                                            </div>
+                                            <!-- <div class="row form-group">
+                                                <div class="col-md-4">
+                                                    <label>BP : <span class="patientInfoText " id="patient_BP"></span> mm Hg</label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>Pulse : <span class="patientInfoText " id="patient_Pulse"></span> bpm</label>
+                                            </div>
+                                                <div class="col-md-4">
+                                                    <label>Temp : <span class="patientInfoText " id="patient_Temperature"></span> °</label>
+                                            </div>
+                                                
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-4">
+                                                <label>RR : <span class="patientInfoText " id="patient_RR"></span></label>
+                                            </div>
+                                                <div class="col-md-4">
+                                                <label>SP O2 : <span class="patientInfoText " id="patient_SP_O2"></span></label>
+                                            </div>
+                                                <div class="col-md-4">
+                                                <label>B Sugar : <span class="patientInfoText " id="patient_BloodSugar"></span></label>
+                                            </div>
+                                               
+                                            </div> -->
+
+                                            <div class="row form-group mb-0">
+                                              
+                                                <div class="col-md-12">
+                                                    <h5 for="reason">Reason : <span class="patientInfoText " id="patient_Reason"></span></h5>
+                                                </div>
+                                            </div> 
+                                        </div>
+
+                                        <div class="row form-group mt-3 hide ">
+                                            
+                                            <div class="col-md-2 mb-3">
+                                                <h6>Doctor Fee</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="doctor_fees" value="0" name="doctor_fees" class="feesAmount form-control" placeholder="0" >
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <h6>Dressing</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="dressing" value="0" name="dressing" class="feesAmount form-control" placeholder="0">
+                                                </div>
+                                            </div>
+                
+                                            <div class="col-md-2 ">
+                                                <h6>NEB</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="neb" value="0" name="neb" class="feesAmount form-control" placeholder="0" >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 text-center">
+                                                <h6>Get Fee</h6>
+                                                <input type="checkbox" id="doctor_checkup_box" name="doctor_checkup_box" class="mt-2" value="doctor_checkup_box" style="width: 25px; height:25px">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6>Total Fee</h6>
+                                                <h4 id="doctor_amount_total_text" class="pt-2"></h4>
+                                            </div>
+                                            <div class="col-md-2 hide doctor_amount_section" >
+                                                <h6>Payment</h6>
+                                                <input type="number" min="0" id="doctor_amount_total" value="0" name="neb" class="form-control" placeholder="0"  >
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row form-group mt-4">
+
+                                            <div class="col-md-4">
+                                                <h6>Compliance</h6>
+                                                    <input type="text" id="compliance"  name="compliance" class=" form-control" placeholder="Enter">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <h6>COMORBIDS</h6>
+                                                    <input type="text" id="comorbids"  name="comorbids" class=" form-control" placeholder="Enter">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <h6>Review or Next Visit</h6>
+                                                    <input type="date" value='{% now "Y-m-d" %}' id="review_next_visit" name="review_next_visit" class=" form-control">
+                                            </div>
+
+                                        </div>
+                                    
+                                        <div class="row form-group mt-4">
+                                            <div class="col-md-4">
+                                                <h5 class="card-title"> <i class="fa fa-thermometer-three-quarters"></i> Lab Test</h5>                                                
+                                                <div class="col-sm-12">
+                                                    <select name="lab" id="lab" class="form-control labtest" multiple>
+                                                        {% for obj in labgroupdata %}
+                                                        <option value="{{ obj.id }}">{{ obj.name }} - {{ obj.amount }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                    <h5 class="card-title"> 
+                                                        <i class="fa fa-universal-access"></i> X-Ray & ECG
+                                                    </h5>                                                
+                                                
+                                                <div class="col-sm-12">
+                                                    <select name="xray" id="xray" class="form-control XrayTest" multiple>
+                                                        {% for obj in xraydata %}
+                                                        <option value="{{ obj.id }}">{{ obj.name }} - {{ obj.amount }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <div class="col-md-4">
+                                                    <h5 class="card-title"> 
+                                                        <i class="fa fa-universal-access"></i>  Scan </h5>                                                
+                                                </div>
+                                                
+                                                <div class="col-sm-12">
+                                                    <select name="scan" id="scan" class="form-control ScanTest" multiple>
+                                                        {% for obj in scandata %}
+                                                        <option value="{{ obj.id }}">{{ obj.name }} - {{ obj.amount }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    
+                                        </div>
+
+                                        <div class="row form-group " style="margin-top: 30px;">
+                                            <div class="col-md-6">
+                                                <h5 class="card-title"><i class="fas fa-syringe"></i>  Injection Details</h5>
+                                            </div>
+                                            <div class="col-md-6" style="text-align: end;">
+                                                <a href="javascript:void(0)" class="btn btn-primary me-1 add_injection_btn">
+                                                    Add Injection
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <section id="InjectioListSection" class="additional_Il">                                
+                                            
+                                        </section>
+                                        
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <h5 class="card-title"><i class="fas fa-pills"></i> Medicine Details</h5>                                                
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <a href="javascript:void(0)" class="btn btn-primary me-1 add_medicine_btn">
+                                                    Add Medicine
+                                                </a>
+                                            </div>
+                                        </div>
+                                    
+    
+                                        <section id="MedicineListSection" class="additional_ml">                                
+                                            
+                                        </section>
+                                    
+                                    
+                                        <div class="row form-group">
+                                            <div class="col-md-12 mb-3">
+                                                <div class="col-md-6">
+                                                    <h5 class="card-title"><i class="fa fa-stethoscope"></i> Doctor Prescription</h5>                                                
+                                                </div>
+                                                <textarea name="prescription" id="prescription" rows="4" class="form-control"></textarea>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="col-md-6">
+                                                    <h5 class="card-title"><i class="fa fa-medkit"></i> Medical Prescription</h5>                                                
+                                                </div>
+                                                <textarea name="medical_prescription" id="medical_prescription" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    
+                                    
+                                        <div class="row form-group">
+                                            <div class="col-md-12 text-center">
+                                                <button type="submit" class="btn btn-primary okBtn AppointmentBtn">OK</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Secttion -->
+
+                        <div class="col-md-3">
+                            <div class="card" style="border:1px solid #e7ebef">
+                                <div class="card-header">
+                                    <h4 class="card-title">Patient History</h4>
+                                </div>
+                                <div class="card-body">
+                                    <!-- <label>Name : <span class="patientInfoText" id="appointedPatientName"></span></label> -->
+
+                                    <section class="Patients_HistoryDT">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="">
+                                                    <div class="">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-center table-hover" id="Patients_HistoryDT">
+                                                                <thead class="thead-light"></thead>
+                                                                <tbody></tbody>
+                                
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </section>
+            </div>
+
+
+            <!-- TAB - 2 -->
+
+
+            <div class="Patients_history tab-pane" id="Patients_history">
+
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="page-title">Doctor Checkup</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                                </i>Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Doctor Checkup</li>
+                        </ul>            
+                    </div>
+                </div>
+
+                <section class="appointmentListDTSection">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card card-table">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-center table-hover" id="appointmentListDT">
+                                            <thead class="thead-light"></thead>
+                                            <tbody></tbody>            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    
+    <section class="modal_section">
+    
+
+        <div class="right-side-views hide">
+            <ul class="sticky-sidebar siderbar-view">
+                <li class="sidebar-icons">
+                    <a class="toggle tipinfo open-settings open-siderbar" href="#" data-toggle="tooltip"
+                        data-placement="left" data-bs-original-title="Tooltip on left">ok
+                    </a>
+                </li>
+            </ul>
+        </div>
+    
+    
+    
+        <div class="sidebar-settings">
+            <div class="sidebar-content sticky-sidebar-one sidebar_content">
+                <div class="sidebar-top">
+                    <div class="container-fluid">
+                        <div class="row align-items-center ">
+                            <div class="col-xl-6 col-sm-6 col-12">
+                                <h5 class="mb-0"> <span class="patientInfoText  appointedPatientName " > </span> - Patient History (<span class="history_patient_type"></span>)</h5>
+                            </div>
+                            <div class="col-xl-6 col-sm-6 col-12">
+    
+                                <a class="btn-closed"> <i style="font-size: 20px;" class="far fa-times-circle"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+
+                    <div class="row mb-3">
+                        <div class="col-md-12" style="text-align: end;">
+                            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold  DownloadReport">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="canvas_div_pdf">
+                            <div class="row align-items-center">
+                                <div class="col-md-6 p-0" style="width: 60%;">
+                                    <h5 class="sidebar-title">Consulted Doctor : <span class="patientInfoText  appointedDoctorName" ></span></h5>
+                                </div>
+                                <div class="col-6 text-end" style="width: 40%;">
+                                    <!-- <h5 class="sidebar-title">O.P Date: <span class="patientInfoText appointedPatientDate"></span></h5> -->
+                                    <h5 class="sidebar-title">Appoint Date: <span class="patientInfoText appointedPatientDate"></span></h5>
+                                </div>
+
+                            <!--    <div class="row form-group">
+                                    <div class="col-md-3">
+                                        <label>Age : <span class="patientInfoText appointedPatientAge" ></span></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Gender : <span class="patientInfoText appointedPatientGender" ></span></label>
+                                    </div>
+                                </div> -->
+        
+
+                                <div class="invoice-item-box mt-0 mb-4">
+
+                                    <div class="row patient_history_checkup_details_section">
+
+                                    </div>
+
+                                    <!-- <div class="row form-group">
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>BP : <span class="patientInfoText patient_BP" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>Pulse : <span class="patientInfoText patient_Pulse" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>Temp : <span class="patientInfoText patient_Temperature" ></span></label>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>RR : <span class="patientInfoText patient_RR" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>SP O2 : <span class="patientInfoText patient_SP_O2" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>B Sugar : <span class="patientInfoText patient_BloodSugar" ></span></label>
+                                        </div>                               
+                                    </div> -->
+
+
+                                    <div class="row form-group mb-0">
+                                    
+                                        <div class="col-md-12">
+                                            <h5 for="reason">Reason : <span class="patientInfoText patient_Reason"></span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row align-items-center Medicine_Details" >
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fas fa-pills"></i> Medicine Details</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+                            
+                            <div class="row align-items-center Injection_Details">
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fas fa-syringe"></i> Injection Details </h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center LabTest_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> <i class="fa fa-thermometer-three-quarters"></i> Lab Test Details :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Xray_Details mb-2">
+                               <!--  <h5 class="sidebar-title mb-4"><i class="fa fa-universal-access"></i> X-Ray Test Details :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Scan_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fa fa-universal-access"></i> Scan Details :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Prescription_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fa fa-stethoscope"></i> Prescription :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Compliance_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> Compliance :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Comorbids_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> COMORBIDS :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+                            <div class="row align-items-center Review_Next_Week_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> Review or Next Week :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-12" style="text-align: end;">
+                            <button class="btn modal_close" style="background-color: #0d6efd; color:white;" >Close</button>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    
+    </section>
+
+
+</div>
+
+
+{% endblock %}
+{% block extra_css %}
+<style>
+    .invoice-item-box{
+        width: 100%;
+        float: none;
+    }
+    .card-middle{
+        padding: 5px;
+    }
+    @media screen and (min-width: 768px){
+        .sidebar_content {
+            /* width: 60% !important;
+            height: 100%; */
+        }
+    }
+    .medicine-row label:not(.ml-row-1 label){
+        display: none;
+    }
+
+    .injection-row label:not(.il-row-1 label){
+        display: none;
+    }
+
+    .medicine-row>div{
+        padding: 0px 2px;
+    }
+
+    .AppointedPatientList_CardSection .card .card-header,
+    .AppointedPatientList_CardSection .card .card-footer{
+        background-color: transparent;
+    }
+
+    .AppointedPatientList_CardSection .badge{
+        padding: 0.65em 0.65em;
+    }
+
+     
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/doctor_checkup.js' %}" type="text/javascript"></script>
+
+{% endblock %}

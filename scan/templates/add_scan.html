@@ -1,0 +1,133 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block scan_nav %} active {% endblock %} 
+{% block add_scan_nav %} active {% endblock %} 
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Scan </h3> 
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Scan</li>
+                </ul>
+            </div>
+            <div class="col-auto addNewBtnSection">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn newScanBtn">
+                    <i class="fas fa-plus"></i> Add Scan
+                </a>
+            </div>
+
+            <div class="col-auto backBtnSection hide">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <section class="scanListDTSection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="scanListDT">
+                                <thead class="thead-light">
+                                    <tr class="fw-bold">
+                                        <td>Id</td>
+                                        <td>Name</td>
+                                        <td>Amount</td>
+                                        <td>Description</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for obj in scandata %}
+    
+                                    <tr>
+                                        <td data-val={{obj.id}}>{{ obj.id }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.name }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.amount }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.description }}</td>   
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                                <i class='menu-icon tf-icons bx bx-edit'></i> Edit</button>
+                                        </td>
+                                    </tr>
+                                
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="scanCreateSection hide">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Scan Information</h4>
+                        <form id="addScanForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+						
+                            <input type="hidden" id="ScanId" name="ScanId" value="0" />
+                            
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="name" class="col-form-label input-label">Name</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="name" id="name" placeholder="Scan Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="amount" class="col-form-label input-label">Amount</label>
+                                    <div class="col-sm-12">
+                                        <input type="number" min="0" class="form-control" name="amount" id="amount" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="description" class="col-form-label input-label">Description</label>
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control" name="description" id="description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+    
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/add_scan.js' %}" type="text/javascript"></script>
+
+
+{% endblock %}

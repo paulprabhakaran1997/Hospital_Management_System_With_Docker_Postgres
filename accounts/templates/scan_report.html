@@ -1,0 +1,157 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block report_nav %} active {% endblock %}
+{% block scan_report_nav %} active {% endblock %}
+{% block main_content %}
+
+
+<div class="content container-fluid">    
+
+    <input type="hidden" id="GetScanReport" data-url="{% url 'get_scan_report' %}">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Scan Report</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Scan Report</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <section >
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card ">
+                        <div class="card-body">
+                            <div class="row">
+                    
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <scanel>From</scanel>
+                                        <input class="form-control" type="date"  id="fromDate"  value='{% now "Y-m-d" %}' required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <scanel>To</scanel>
+                                        <input class="form-control"  type="date"  id="toDate"  value='{% now "Y-m-d" %}' required>
+                                    </div>
+                                </div>
+                
+                                <div class="col-md-2 searchBtnSection" style="display: flex; align-items: center;">
+                                    <button class="btn btn-primary searchBtn"><i class="fas fa-search"></i> Search</button>
+                            </div>
+                
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="TestedPatientDTSection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="card-title">Scan Taken Patient Report</h5>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="testedPatientListDT">
+                                <thead class="thead-light"></thead>
+                                <tbody> </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="text-align: left;"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="ScanPaymentTransactionDTSection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="card-title">Scan Payment Transaction Report</h5>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="scanPaymentTransactionListDT">
+                                <thead class="thead-light"></thead>
+                                <tbody> </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="text-align: left;"></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
+
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    div.dt-buttons
+    {
+        text-align:right !important;
+        float:none !important
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/scan_report.js' %}" type="text/javascript"></script>
+
+{% endblock %}

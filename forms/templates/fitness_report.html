@@ -1,0 +1,171 @@
+{% extends 'base.html' %} 
+
+{% load static %} 
+
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+
+    <input type="hidden" id="formData" data-val="{{ formData }}">
+
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Fitness Report</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Fitness Report</li>
+                </ul>
+            </div>
+            <div class="col-auto ">
+                <a href="{% url 'forms' %}" class="btn btn-primary me-1 ">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            <div class="col-auto printBtnSection ">
+                <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold printBtn DownloadReport">
+                    <i class="fas fa-print"></i> Print
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row PatientTesting_PrintView ">
+        
+        <div class="row justify-content-center " style="width:100%">
+            <div class="col-xl-7">
+                <div class="card">
+
+                    <div class="card-body canvas_div_pdf">
+                        <div class="invoice-item">
+
+                            <div class="row mb-4">
+                                <div class="col-md-6" style="width: 65%;">
+                                    <div class="invoice-logo mb-2">
+                                        {% if configuration.hospital_logo %}
+                                            <img src="/media/{{ configuration.hospital_logo }}" alt="Logo">
+                                        {% else %}
+                                            <img src="/static/img/logo.png" alt="Logo">
+                                        {% endif %}
+                                    </div>
+                                    <div class="invoice-info" style="width: 100%;">
+                                        <p class="invoice-details invoice-details-two p-2">
+                                           Life is a Gift... Live it Well...
+                                        </p>
+                                    </div>
+                                    <br>
+                                   
+                                </div>
+    
+    
+                                <div class="col-md-6" style="width: 35%;">
+                                    <div class="invoice-info">
+                                        <p class="invoice-details">
+                                            {{ configuration.hospital_address1 }}<br> 
+                                            {{ configuration.hospital_address2 }} Pincode-{{ configuration.hospital_pincode }}<br>                                            
+                                            <strong>Ph: {{ configuration.hospital_phone }}<br>
+                                            Email: {{ configuration.hospital_email }}</strong>
+
+                                            <br>
+                                            <br>
+                                            Place : Which Place<br>
+                                            Date  : {{formData.date|date:'d-m-Y'}}
+
+                                        </p>
+
+                                        
+                                    </div>
+    
+                                   
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+
+                                <div class="col-md-12 d-flex justify-content-center  mb-4">
+                                    <h2>MEDICAL FITNESS CERTIFICATE</h2>
+                                </div>
+                                
+                                <div class="col-md-12 d-flex justify-content-center mb-5">
+                                    <p>This is to certify that I have carefully examined Mr./Ms.   <span class="dashing">{{formData.name}}</span>     
+                                    son/daughter of  <span class="dashing">{{formData.father_name}}</span>  <br>aged <span class="dashing">{{formData.age}}</span>
+                                    of village <span class="dashing">{{formData.village}}</span>
+                                    district<span class="dashing"> {{ formData.district}}</span>   state<span class="dashing">{{formData.state}}</span>  Pincode <span class="dashing">{{formData.pincode}}</span>
+                                    
+                                    </p>
+                                </div>
+
+                                
+                                <div class="col-md-12 d-flex justify-content-center mb-5">
+                                    <p>
+                                        He/She is an good mental and physical health and is free from any physical  defects such as deafness,<br>
+                                        colour blindness and any chronic  or contagious diseases. This certificate is being issued to <br>
+                                        his/her for the purpose of <span class="dashing">{{formData.purpose_of}}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-md-12 d-flex justify-content-start mb-5">
+                                    <p>Signature of the Candidate :......................</p>
+                                </div>
+                                <div class="col-md-12 d-flex justify-content-end mb-5">
+                                    <p> Medical Officer's Name :......................<br>
+                                        Registration Number :......................<br>
+                                        Signature with Seal :......................</p>
+                                </div>
+
+                            </div>
+
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-center">
+                                        <p>
+                                            (Note : A Medical certificate issued by a qualified doctor possessing at least an  M.B.B.S Degree, registered  <br> with the 
+                                            Medical Council of india is only valid. It will be valid up to one year from the data of issuance )
+                                        </p>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+    
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+            
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    .dashing{
+        /* text-decoration:underline dashed 2px; */
+        font-size: 16px;
+        font-weight: 600;
+        color: black;
+    }
+</style>
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+<script src="{% static 'js/pages/fitness_report.js' %}" type="text/javascript"></script>
+
+{% endblock %}

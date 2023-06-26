@@ -1,0 +1,353 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block report_nav %} active {% endblock %}
+{% block patient_nav %} active {% endblock %}
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="GetPatientDataOnSearch" data-url="{% url 'get_patient_data_onsearch' %}">
+    <input type="hidden" id="get_patient_checkup_history" data-url="{% url 'get_patient_checkup_history' %}">
+    <input type="hidden" id="get_patient_report" data-url="{% url 'get_patient_report' %}">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Patient Report</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Patient Report</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <section >
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card ">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-sm-8">
+                                    <label for="patient_name">Select Patient</label>
+                                    <input type="text" class="form-control" name="patient_typeahead"
+                                        id="patient_typeahead">
+                                </div>
+                            </div>
+                        </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="Patient_Details_Section hide">
+        <input type="hidden" name="patientId" id="patientId" value="0">
+
+        <div class="card-body alert alert-success  alert-dismissible  patient_data ">
+            <div class="row">
+                <div class="col-6">
+                    <div class="text-left">
+                
+                        <h4 class="text-primary">Patient Name: 
+                            <span class="patientInfoText" id="appointedPatientName"></span>
+                            [#<span class="patientInfoText" id="appointedPatientId"></span>]
+                        </h4>
+                        <h6 class="text-dark">
+                            Age & Gender: <span class="patientInfoText" id="appointedPatientAge"></span> Yrs/
+                            <span class="patientInfoText" id="appointedPatientGender"></span>
+                        </h6>
+                        <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id="appointedPatientPhone">98876554</span></h6>
+                        <h6 class="text-dark">Place: <span class="patientInfoText" id="appointedPatientPlace"></span></h6>
+                    </div>
+                </div>
+                <!-- <div class="col-6 text-end">
+                    <h4 class="text-danger"><span class="admission_id" id="admission_id"></span></h4>
+                    <h6>Appointed Date: <span class="patientInfoText" id="appointedDate"></span></h6>
+                    <h6>Doctor: <span class="patientInfoText" id="appointedDocter"></span></h6>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section class="OP_History_section">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="card-title">OP Appointments</h5>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="OP_HistoryListDT">
+                                <thead class="thead-light"></thead>
+                                <tbody> </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="IP_History_section">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="card-title">IP Appointments</h5>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="IP_HistoryListDT">
+                                <thead class="thead-light"></thead>
+                                <tbody> </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <section class="modal_section">
+    
+
+        <div class="right-side-views hide">
+            <ul class="sticky-sidebar siderbar-view">
+                <li class="sidebar-icons">
+                    <a class="toggle tipinfo open-settings open-siderbar" href="#" data-toggle="tooltip"
+                        data-placement="left" data-bs-original-title="Tooltip on left">ok
+                    </a>
+                </li>
+            </ul>
+        </div>
+    
+    
+    
+        <div class="sidebar-settings">
+            <div class="sidebar-content sticky-sidebar-one sidebar_content">
+                <div class="sidebar-top">
+                    <div class="container-fluid">
+                        <div class="row align-items-center ">
+                            <div class="col-xl-6 col-sm-6 col-12">
+                                <h5 class="mb-0"> <span class="patientInfoText  appointedPatientName " > </span> - Patient History (<span class="history_patient_type"></span>)</h5>
+                            </div>
+                            <div class="col-xl-6 col-sm-6 col-12">
+    
+                                <a class="btn-closed"> <i style="font-size: 20px;" class="far fa-times-circle"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+
+                    <div class="row mb-3">
+                        <div class="col-md-12" style="text-align: end;">
+                            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold  DownloadReport">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="canvas_div_pdf">
+                            <div class="row align-items-center">
+                                <div class="col-md-6 p-0" style="width: 60%;">
+                                    <h5 class="sidebar-title">Consulted Doctor : <span class="patientInfoText  appointedDoctorName" ></span></h5>
+                                </div>
+                                <div class="col-md-6 text-end" style="width: 40%;">
+                                    <!-- <h5 class="sidebar-title">O.P Date: <span class="patientInfoText appointedPatientDate"></span></h5> -->
+                                    <h5 class="sidebar-title">Appoint Date: <span class="patientInfoText appointedPatientDate"></span></h5>
+                                </div>
+
+                            <!--    <div class="row form-group">
+                                    <div class="col-md-3">
+                                        <label>Age : <span class="patientInfoText appointedPatientAge" ></span></label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Gender : <span class="patientInfoText appointedPatientGender" ></span></label>
+                                    </div>
+                                </div> -->
+        
+
+                                <div class="invoice-item-box mt-0 mb-4" style="width: 100%;">
+
+                                    <div class="row patient_history_checkup_details_section">
+
+                                    </div>
+
+                                    <!-- <div class="row form-group">
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>BP : <span class="patientInfoText patient_BP" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>Pulse : <span class="patientInfoText patient_Pulse" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>Temp : <span class="patientInfoText patient_Temperature" ></span></label>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>RR : <span class="patientInfoText patient_RR" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>SP O2 : <span class="patientInfoText patient_SP_O2" ></span></label>
+                                        </div>
+                                        <div class="col-md-4" style="width: 30%;">
+                                            <label>B Sugar : <span class="patientInfoText patient_BloodSugar" ></span></label>
+                                        </div>                               
+                                    </div> -->
+
+
+                                    <div class="row form-group mb-0">
+                                    
+                                        <div class="col-md-12">
+                                            <h5 for="reason">Reason : <span class="patientInfoText patient_Reason"></span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row align-items-center Medicine_Details" >
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fas fa-pills"></i> Medicine Details</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+                            
+                            <div class="row align-items-center Injection_Details">
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fas fa-syringe"></i> Injection Details </h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center LabTest_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> <i class="fa fa-thermometer-three-quarters"></i> Lab Test Details :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Xray_Details mb-2">
+                               <!--  <h5 class="sidebar-title mb-4"><i class="fa fa-universal-access"></i> X-Ray Test Details :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Scan_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fa fa-universal-access"></i> Scan Details :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Prescription_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"><i class="fa fa-stethoscope"></i> Prescription :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Compliance_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> Compliance :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+
+                            <div class="row align-items-center Comorbids_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> COMORBIDS :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+                            <div class="row align-items-center Review_Next_Week_Details mb-2">
+                                <!-- <h5 class="sidebar-title mb-4"> Review or Next Week :</h5>
+                                <div class="row form-group "></div> -->
+                            </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-12" style="text-align: end;">
+                            <button class="btn modal_close" style="background-color: #0d6efd; color:white;" >Close</button>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    
+    </section>
+
+
+
+
+</div>
+
+{% block extra_css %}
+<style>
+    .typeahead.dropdown-menu {
+        width: 100%;
+        /* max-width: 375px; */
+        min-width: 15rem;
+        position: inherit;
+    }
+
+    .typeahead .dropdown-item {
+        background: #f1f1f1;
+        border: 2px solid #c1c0c0;
+        margin-bottom: 2px;
+        border-radius: 5px;
+    }
+
+    .invoice-table>tbody>tr>td {
+        padding: 10px 20px;
+    }
+</style>
+
+{% endblock %}
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/patient_report.js' %}" type="text/javascript"></script>
+
+
+
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block Management_nav %} active {% endblock %}
+{% block staff_nav %} active {% endblock %} 
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="RoleData" data-val="{{ roledata }}">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Staffs</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Staffs</li>
+                </ul>
+            </div>
+            <div class="col-auto addNewBtnSection">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn newStaffBtn">
+                    <i class="fas fa-plus"></i> New Staff
+                </a>
+            </div>
+
+            <div class="col-auto backBtnSection hide">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <section class="staffListDTSection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="staffListDT">
+                                <thead class="thead-light">
+                                    <tr class="fw-bold">
+                                        <td>Id</td>
+                                        <td>Name</td>
+                                        <td>Phone</td>
+                                        <td>Address</td>
+                                        <td>Role</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for obj in staffdata %}    
+                                    <tr>
+                                        <td data-val={{obj.id}}>{{ obj.id }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.name }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.phone }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.address }}</td>                                    
+                                        <td data-val={{obj.id}}>{{ obj.role_name }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                                <i class='menu-icon tf-icons bx bx-edit'></i> Edit</button>
+                                        </td>
+                                    </tr>
+                                
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="staffInfoSection hide">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Staff Information</h4>
+                        <form id="addStaffForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+						
+                            <input type="hidden" id="staffId" name="staffId" value="0" />
+                            
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="name" class="col-sm-3 col-form-label input-label">Name</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="name" id="name" placeholder="Staff Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="col-sm-3 col-form-label input-label">Phone</label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">(+91)</span>
+                                            <input type="text"  id="phone" name="phone" class="form-control" placeholder="9876543210">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="address" class="col-sm-3 col-form-label input-label">Address</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" id="address" name="address" rows="2" class="form-control" placeholder="Address">
+                                    </div>
+                                </div>
+    
+                                <div class="col-md-6">
+                                    <label for="role" class="col-sm-3 col-form-label input-label">Role</label>
+                                    <div class="col-sm-12">
+                                        <select id="role" name="role" class="form-control" required>
+                                            {% for obj in roledata %}
+                                                <option value={{obj.id}}>{{obj.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+    
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-md-12">
+                                    <h2 class="card-title">Login information</h2>
+                                </div>
+                            </div>
+    
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="username" class="col-form-label input-label">UserName</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="username" id="username" required>
+                                    </div>
+                                </div>
+    
+                                <div class="col-md-6">
+                                    <label for="password" class="col-form-label input-label">Password</label>
+                                    <div class="col-sm-12">
+                                        <input type="password" class="form-control" name="password" id="password">
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+    
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/add_staff.js' %}" type="text/javascript"></script>
+
+
+{% endblock %}

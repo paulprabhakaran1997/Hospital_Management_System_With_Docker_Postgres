@@ -1,0 +1,321 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block xray_nav %} active {% endblock %} 
+{% block xray_from_appointment_nav %} active {% endblock %} 
+{% block main_content %}
+
+<div class="content container-fluid">
+
+    <div class="row align-items-center">
+        <div class="col-12">
+            <ul class="nav nav-pills justify-content-end" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active"  data-toggle="tab" href="#Patients_forTestTake">Pending X-Ray</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  data-toggle="tab" href="#Patients_history">X-Ray History</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <section class="XrayTestSection">
+        <div class="tab-content">
+            <div class="Patients_forTestTake tab-pane active" id="Patients_forTestTake">
+    
+                <input type="hidden" id="XrayTest_Data_Url" data-url="{% url 'get_xray_test_data' %}">
+
+                <input type="hidden" id="canceling_xray_url" data-url="{% url 'canceling_xray' %}">
+
+
+                <input type="hidden" id='xraydata' data-val="{{xraydata}}">
+    
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Xray Test</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Xray Test</li>
+                            </ul>
+                        </div>
+                        <!-- <div class="col-auto addNewBtnSection">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn newAppointmentBtn">
+                                <i class="fas fa-plus"></i> New Test
+                            </a>
+                        </div> -->
+    
+                        <div class="col-auto backBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    
+                <section style="margin-bottom:35px;" class="Pending-Xray-Test-Section">
+                    <h5>X-Ray Test [Pending]</h5>
+                    
+                    <div class="row XRay-Test-List mt-4" ></div>
+                </section>
+
+
+                <section class="Xray_Section hide">
+    
+                    <div class="col-md-12">
+                        <form id="Xray_Report_Form" action="." method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+    
+                            <input type="hidden" name="patientId" id="patientId" value="0">
+    
+                            <input type="hidden" name="patient_appointment_Id" id="patient_appointment_Id" value="0">
+
+                            <input type="hidden" name="patient_IP_assignid" id="patient_IP_assignid" value="0">
+
+                            <input type="hidden" name="patient_Ward_assignid" id="patient_Ward_assignid" value="0">
+
+                            <input type="hidden" name="returnXrayTestPatient_Id" id="returnXrayTestPatient_Id" value="0">
+    
+    
+                            <div class="patientDetailsSection" style="margin-bottom:15px">
+
+                                <div class="card-body alert alert-warning  alert-dismissible">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="text-left">
+                                        
+                                                <h4 class="text-primary">Patient Name: 
+                                                    <span class="patientInfoText" id="appointedPatientName"></span>
+                                                    [#<span class="patientInfoText" id="appointedPatientId"></span>]
+                                                </h4>
+                                                <h6 class="text-dark">
+                                                    Age & Gender: <span class="patientInfoText" id="appointedPatientAge"></span> Yrs/
+                                                    <span class="patientInfoText" id="appointedPatientGender"></span>
+                                                </h6>
+                                                <h6 class="text-dark">Contact: <span class="" id="">98876554</span></h6>
+                                                <h6 class="text-dark">Place: <span class="patientInfoText" id="appointedPatientPlace"></span></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h4 class="text-danger"><span class="admission_id" id="admission_id">R-1234</span></h4>
+                                            <h6>Appointed Date: <span class="patientInfoText" id="appointedDate"></span></h6>
+                                            <h6>Doctor: <span class="patientInfoText" id="appointedDocter"></span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-12 mb-3 mt-2">
+                                    <h5>X-Ray to be Taken: <span class="patientInfoText text-primary" id="SuggestedXray"></span></h5>
+                                </div>
+        
+                                <div class="row form-group">
+    
+                                    <div class="col-md-4">
+                                        <label for="XrayTest">Select X-Ray Type</label>
+                                        <select name="XrayTest" id="XrayTest" class="form-control" multiple required>
+                                        </select>
+                                    </div>
+    
+    
+                                    <div class="col-md-4">
+                                        <label for="Xray-FeeAmount">X-Ray Fee</label>
+                                        <input type="text" name="Xray-FeeAmount" id="Xray-FeeAmount" class="form-control" readonly>
+                                    </div>
+    
+                                </div>
+    
+    
+                                <div class="text-end submitBtnSection">
+                                    <button type="submit" class="btn btn-primary submitBtn">Proceed</button>
+                                </div>
+    
+    
+                            </div>
+    
+                        </form>
+                    </div>
+                </section>
+    
+            </div>
+    
+    
+    
+            <div class="Patients_history tab-pane" id="Patients_history">
+
+                <input type="hidden" id="XrayForPatientData" data-val="{{ xrayforpatientdata }}">
+
+                <input type="hidden" id="xray_payment" data-url="{% url 'xray_payment' %}">
+
+
+                <div class="page-header">
+                    <div class="row align-items-center">
+
+                        <div class="col">
+                            <h3 class="page-title">Xray From Appointment</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Xray From Appointment</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-auto history_backBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 history_backBtn">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+
+                        <div class="col-auto printBtnSection hide ">
+                            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold  printBtn Payment_DownloadReport">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            
+                <section class="XrayPatientDTSection">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card card-table">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-center table-hover" id="xrayPatientListDT">
+                                            <thead class="thead-light">
+                                                
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="xray_GetpaymentSection hide">
+
+                    <div class="card-body alert alert-success   alert-dismissible  patient_data ">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="text-left">
+                            
+                                    <h4 class="text-primary">Patient Name: 
+                                        <span class="patientInfoText appointedPatientName" id="appointedPatientName"></span>
+                                        [#<span class="patientInfoText appointedPatientId" id="appointedPatientId"></span>]
+                                    </h4>
+                                    <h6 class="text-dark">
+                                        Age & Gender: <span class="patientInfoText appointedPatientAge" id="appointedPatientAge"></span> Yrs/
+                                        <span class="patientInfoText appointedPatientGender" id="appointedPatientGender"></span>
+                                    </h6>
+                                    <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id="appointedPatientPhone"></span></h6>
+                                    <h6 class="text-dark">Place: <span class="patientInfoText appointedPatientPlace" id="appointedPatientPlace"></span></h6>
+                                </div>
+                            </div>
+                            <div class="col-6 text-end AppointmentDetails">
+                                <h4 class="text-danger"><span class="admission_id" id="admission_id"></span></h4>
+                                <h6>Appointed Date: <span class="patientInfoText appointedDate" id="appointedDate"></span></h6>
+                                <h6>Doctor: <span class="patientInfoText appointedDoctor" id="appointedDocter"></span></h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                    
+                            <form id="Xray_PaymentForm"  method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                                <input type="hidden" id="op_appointmentId" name="appointmentId" value="0" />
+                            <div class="row form-group" style="display:flex; justify-content: center;">
+
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="card-title">Payment Details</h5> 
+                                            </div>                                       
+                                            </div>
+                                        <div class="card-body">
+                                            
+                                            <div class="row" >
+                                                <div class="row form-group amountSection">
+                                                    <input type="hidden" name="outPatientPaymentId" id="outPatientPaymentId"
+                                                        value="0">
+                                                    <input type="hidden" name="totalAmount" id="totalAmount" value="0">
+                                                    <input type="hidden" name="balanceValue" id="balanceValue" value="0">
+                                                    <input type="hidden" name="nowPayingAmount" id="nowPayingAmount" value="0">
+                                                    <input type="hidden" name="paymentReceived" id="paymentReceived" value="0">
+                                                    <input type="hidden" name="overallBalance" id="overallBalance" value="0">
+
+                                                    <input type="hidden" name="XrayTestId" id="XrayTestId" value="0" />
+
+                                                    <div class="col-md-12 amountCollection cash_collection_col mb-2">
+                                                        <h6 class="">Cash</h6>
+                                                        <input type="number" class="form-control amountCollectionValue cashValue" min="0" name="cash" value="0" id="cash">
+                                                    </div>
+
+                                                    <div class="col-md-6 amountCollection upi_collection_col">
+                                                        <h6 class="">UPI</h6>
+                                                        <input type="number" class="form-control amountCollectionValue upiValue" min="0" name="upi" value="0" id="upi">
+                                                    </div>
+
+                                                    <div class="col-md-6 amountCollection upi_collection_col">
+                                                        <h6 class="">Debit Card</h6>
+                                                        <input type="number" class="form-control amountCollectionValue cardValue" min="0" name="upi" value="0" id="card">
+                                                    </div>
+                                                </div>
+
+                                                <div class="amountSection paymentSection row">
+                                                    <div class="totalAmountView col-md-12 text-center mb-3">
+                                                        <h3 class="amountLabel">Total Fees: ₹ <span class="amountLabelValue" id="totalAmountText">0</span></h3>
+                                                    </div>
+
+                                                    <div class="col-md-6 existingPaidAmountView" style="display: none;">
+                                                        <h6 class="amountLabel">Already Paid<span class="text-success pull-right">₹ <span class="amountLabelValue" id="existingpaidAmountText">0</span></span></h6>
+                                                        <h6 class="amountLabel">Balance<span class="text-danger pull-right">₹ <span class="amountLabelValue" id="PrevbalanceAmountText">0</span></span></h6>
+                                                    </div>
+                                                    <div class="paidAmountView col-md-6">
+                                                        <h6 class="amountLabel">Now Paying<span class="text-success pull-right"> ₹ <span class="amountLabelValue" id="nowPayingAmountText">0</span></span></h6>
+                                                        <h6 class="amountLabel">Balance<span class="text-danger pull-right"> ₹ <span class="amountLabelValue" id="balanceAmountText">0</span></span></h6>
+                                                    </div>
+
+                                                    <div class="balanceAmountView col-md-6">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end submitBtnSection">
+                                                <button type="submit" class="btn btn-primary submitBtn">Process Payment</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+                            </form>
+                                
+                        </div>
+                    </div>
+                </section>
+
+
+            </div>
+    
+        </div>
+    </section>
+
+
+
+</div>
+
+{% endblock %} {% block extra_js %}
+
+<script src="{% static 'js/pages/xray_from_appointment.js' %}" type="text/javascript"></script>
+
+{% endblock %}

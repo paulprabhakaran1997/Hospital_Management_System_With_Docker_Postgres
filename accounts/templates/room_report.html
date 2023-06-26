@@ -1,0 +1,245 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block report_nav %} active {% endblock %}
+{% block room_report_nav %} active {% endblock %}
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+
+    <!-- <input type="hidden" id="AssignRoomData" data-val="{{ assignroomdata }}">
+    <input type="hidden" id="RoomPaymentTransactionData" data-val="{{ roompaymenttransactiondata }}">
+    <input type="hidden" id="BalanceData" data-val="{{ balancedata }}"> -->
+
+	<div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">IP Report</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                    </i>Home</a>
+                </li>
+                <li class="breadcrumb-item active">IP Report</li>
+            </ul>            
+        </div>
+
+        <div class="col-auto">
+            <ul class="nav nav-pills justify-content-end" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="todaysreportBtn" data-toggle="tab" href="#ReportContainer">Today's Report</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="ovarallReportBtn" data-toggle="tab" href="#ReportContainer">Overall Report</a>
+                </li>
+                
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Datatble Section -->
+
+    <div class="DatatableSection">
+        <div class="tab-content">
+
+            <!-- Report Container -->
+            
+
+            <div id="ReportContainer" class="tab-pane active"><br>
+
+                <div class="overallReportHeader " style="display: flex; justify-content:space-between; margin-bottom: 15px;">
+                    <h3>IP Report</h3>
+                    <a class="btn btn-primary filter-btn filterView hide" href="javascript:void(0);" id="filter_search">
+                        <i class="fas fa-filter"></i> Filter
+                    </a>
+                </div>
+
+
+                <div id="filter_inputs" class="card filter-card hide">
+                    <div class="card-body pb-0">
+                        <div class="row">
+                
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input class="form-control" id="fromDate" type="date" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input class="form-control" id="toDate" type="date" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2 searchBtnSection" style="display: flex; align-items: center;">
+                                    <button class="btn btn-primary resetBtn m-2"><i class="fas fa-redo-alt"></i></button>
+                                    <button class="btn btn-primary searchBtn"><i class="fas fa-search"></i> Search</button>
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="TodaysAssignRoomTableContainer">
+                    <div class="col-sm-12">
+                        <div class="card card-table">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-4 px-0">
+                                        <h5 class="card-title assignroomTableTitle">Today's IP report </h5>
+                                    </div>
+                                    <div class="col-md-3 px-0">
+                                        <h6 class="dateFilterText" style="color:#7638ff"></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-center table-hover" id="patient_assignroom_ListDT">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th style="text-align: left;"></th>
+                                                <th style="text-align: left;"></th>
+                                                <th style="text-align: left;"></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="totalText"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+    
+                <div class="row" id="TodaysPaymentTableContainer">
+                    <div class="col-sm-12">
+                        <div class="card card-table">
+                            <div class="card-header">
+                                <div class="row">                                    
+                                    <div class="col-md-4">
+                                        <h5 class="card-title paymentTableTitle">Today's IP Payment Transaction report </h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="dateFilterText" style="color:#7638ff"></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-center table-hover" id="Payment_ListDT">
+                                        <thead>
+                                            
+                                        </thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" id="BalanceTableContainer">
+                    <div class="col-sm-12">
+                        <div class="card card-table">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-4 px-0">
+                                        <h5 class="card-title">Payment Balance in IP Report </h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-center table-hover" id="patient_Balance_ListDT">
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th style="text-align: left;"></th>
+                                                <th style="text-align: left;"></th>
+                                                <th style="text-align: left;"></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="totalText"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    
+
+</div>
+
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+    div.dt-buttons
+    {
+        text-align:right !important;
+        float:none !important
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/pages/room_report.js' %}" type="text/javascript"></script>
+
+{% endblock %}

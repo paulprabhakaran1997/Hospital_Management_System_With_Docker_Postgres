@@ -1,0 +1,434 @@
+{% extends 'base.html' %} {% load static %} {% block room_wards_nav %} active {% endblock %} {% block ward_view_nav %} active {% endblock %} {% block main_content %}
+
+
+<div class="content container-fluid">
+    <input type="hidden" id="get_ward_data_url" data-url="{% url 'get_ward_data' %}">
+    <input type="hidden" id="room_url" data-url="{% url 'room' %}">
+    
+    <input type="hidden" id="get_room_data_url" data-url="{% url 'get_room_data' %}">
+    <input type="hidden" id="RoomCategory_data" data-val="{{RoomCategory_data}}">
+
+    <div class="card bg-white">
+        
+        <div class="card-body">
+            
+            <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                <li class="nav-item"><a class="nav-link active" href="#RoomContainer" data-bs-toggle="tab">Room Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="#RoomCategory" data-bs-toggle="tab">Room Category</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="#WardContainer" data-bs-toggle="tab">Ward Details</a></li>
+                <li class="nav-item"><a class="nav-link" href="#WardBedContainer" data-bs-toggle="tab">Ward Bed Details</a></li> -->
+            </ul>
+
+            <div class="tab-content">
+                
+                <div class="tab-pane show active" id="RoomContainer">
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Room</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Room</li>
+                            </ul>
+                        </div>
+                        <div class="col-auto addNewBtnSection">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn ">
+                                <i class="fas fa-plus"></i> Add Room 
+                            </a>
+                        </div>
+            
+                        <div class="col-auto backBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                                <i class="fas fa-arrow-left"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <section class="RoomView">
+                        <div class="row ">
+                            <div class="col-sm-12">
+                                <div class="card card-table">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-center table-hover" id="roomListDT">
+                                                <thead>
+                                                </thead>
+                                                <tbody>
+                        
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="RoomCreation hide">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                
+                                        <form id="addRoomsForm">
+                
+                                            <input type="hidden" id="roomId" name="roomId" value="0" />
+                                        
+                                            <div class="row form-group">
+                                                <div class="col-md-4">
+                                                    <label for="room_no">Room No</label>
+                                                        <input type="text" class="form-control" name="room_no" id="room_no" placeholder="Room No" required>
+                                                </div>
+                                        
+                                                <div class="col-md-4">
+                                                    <label for="room_type">Room Type</label>
+                                                        <select class="form-control" id="room_type" name="room_type" required>
+                                                            <option value=""></option>
+                                                            <option value="Room">Room</option>
+                                                            <option value="Ward">Ward</option>
+                                                        </select>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="room_category">Category</label>
+                                                        <select class="form-control" id="room_category" name="room_category" required>
+                                                            <option value=""></option>
+                                                        </select>
+                                                </div>
+                                        
+                                            </div>
+                                        
+                                            <div class="row form-group">
+                                                <div class="col-md-6">
+                                                    <label for="price">Price</label>
+                                                        <input type="number" min="0" class="form-control" name="price" id="price" placeholder="price" required>
+                                                </div>
+                                        
+                                                <div class="col-md-6">
+                                                    <label for="description">Description</label>
+                                                        <textarea type="text" id="room_description" name="room_description" rows="2" class="form-control" placeholder="Room Description"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                                            </div>
+                                        </form>
+                
+                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <div class="tab-pane" id="RoomCategory">
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Room Category</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Room Category</li>
+                            </ul>
+                        </div>
+                        <div class="col-auto addCategorySection">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 addCategorybtn ">
+                                <i class="fas fa-plus"></i> Add Category 
+                            </a>
+                        </div>
+            
+                        <div class="col-auto backCategorySection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 backCategoryBtn">
+                                <i class="fas fa-arrow-left"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <section class="RoomCategoryView">
+                        <div class="row ">
+                            <div class="col-sm-12">
+                                <div class="card card-table">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-center table-hover" id="roomCategoryListDT">
+                                                <thead>
+
+                                                </thead>
+                                                <tbody>
+      
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+
+                    <section class="RoomCategory hide">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                
+                                        <form id="addRoomsCategory" action="{% url 'room_category' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                
+                                            <input type="hidden" id="roomCategoryId" name="roomCategoryId" value="0" />
+                                        
+                                            <div class="row form-group">
+
+                                                <div class="col-md-6">
+                                                    <label for="category">Category Type</label>
+                                                        <select class="form-control" id="category" name="category" required>
+                                                            <option value=""></option>
+                                                            <option value="Room">Room</option>
+                                                            <option value="Ward">Ward</option>
+                                                        </select>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="category_name">Category Name</label>
+                                                        <input type="text" class="form-control" name="category_name" id="category_name" placeholder="Enter" required>
+                                                </div>
+                                        
+                                            </div>
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                                            </div>
+                                        </form>
+                
+                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <div class="tab-pane" id="WardContainer">
+                    <input type="hidden" id="WardData" data-val="{{ warddata }}">
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Ward</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'home' %}">
+                                        </i>Home</a>
+                                </li>
+                                <li class="breadcrumb-item active">Ward</li>
+                            </ul>
+
+                        </div>
+
+                        <div class="col-auto addNewBtnSection">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn ">
+                                <i class="fas fa-plus"></i> Add Ward 
+                            </a>
+                        </div>
+            
+                        <div class="col-auto backBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                                <i class="fas fa-arrow-left"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row WardCreation hide">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Ward information</h2>
+                                </div>
+                                <div class="card-body">
+                                    <form id="addWardsForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                                        <input type="hidden" id="wardId" name="wardId" value="0" />
+
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="ward_name" class="col-sm-3 col-form-label input-label">Ward Name</label>
+                                                <div class="col-sm-12">
+                                                    <input type="text" class="form-control" name="ward_name" id="ward_name" placeholder="Ward Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="ward_amount" class="col-sm-3 col-form-label input-label">Ward Amount</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" class="form-control" name="ward_amount" id="ward_amount" placeholder="Ward Amount" required>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="description" class="col-sm-3 col-form-label input-label">Description</label>
+                                                <div class="col-sm-12">
+                                                    <textarea type="text" id="description" name="description" rows="2" class="form-control" placeholder="Description"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row WardView">
+                        <div class="col-sm-12">
+                            <div class="card card-table">
+
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-center table-hover" id="wardListDT" style="width:100%">
+                                            <thead></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane" id="WardBedContainer">
+                    <input type="hidden" id="WardData" data-val="{{ warddata }}">
+                    <input type="hidden" id="WardBedData" data-val="{{ wardbeddata }}">
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Ward Bed</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'home' %}">
+                                        </i>Home</a>
+                                </li>
+                                <li class="breadcrumb-item active">Ward Bed</li>
+                            </ul>
+
+                        </div>
+                        <div class="col-auto addWardBedBtnSection">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1  addWardbedBtn ">
+                                <i class="fas fa-plus"></i> Add WardBed
+                            </a>
+                        </div>
+            
+                        <div class="col-auto backWardbedBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 WardBedBackBtn">
+                                <i class="fas fa-arrow-left"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row WardBedCreation hide">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Ward Details</h2>
+                                </div>
+                                <div class="card-body">
+                                    <form id="addWardBedForm" action="{% url 'ward_bed' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                                        <input type="hidden" id="wardbedId" name="wardbedId" value="0" />
+
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="ward" class="col-form-label input-label">Ward Name</label>
+                                                <div class="col-sm-12">
+                                                    <select name="ward" id="ward" class="form-control" required> 
+                    
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="bed_no" class="col-form-label input-label">Bed Number</label>
+                                                <div class="col-sm-12">
+                                                    <input type="text"  name="bed_no" id="bed_no" class="form-control" required>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <div class="col-md-6">
+                                                <label for="wardbed_description" class="col-sm-3 col-form-label input-label">Description</label>
+                                                <div class="col-sm-12">
+                                                    <textarea type="text" id="wardbed_description" name="wardbed_description" rows="2" class="form-control" placeholder="Description"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row WardBedView">
+                        <div class="col-sm-12">
+                            <div class="card card-table">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-center table-hover" id="wardbedListDT" style="width:100%">
+                                            <thead></thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                
+
+
+                
+            </div>
+        </div>
+    </div>
+
+
+  <!--   <div class="row align-items-center">
+        <div class="col-12">
+            <ul class="nav nav-pills justify-content-end" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="wardBtn" data-toggle="tab" href="#WardContainer">Ward Details</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="wardDetailsBtn" data-toggle="tab" href="#WardBedContainer">Ward Bed Details</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+ -->
+
+   
+
+</div>
+
+{% endblock %} {% block extra_js %}
+
+<script src="{% static 'js/pages/manage_ward_view.js' %}" type="text/javascript"></script>
+
+{% endblock %}

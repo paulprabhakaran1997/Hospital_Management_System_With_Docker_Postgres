@@ -1,0 +1,483 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>{{ configuration.hospital_name }}</title>
+
+    <link rel="shortcut icon" href="{% static 'img/fav-icon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome/css/all.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+ 
+
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/daterangepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/datatables/datatables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables/responsive.dataTables.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables/buttons.dataTables.min.css' %}">
+
+    <!-- Select2 -->
+
+    <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+
+    <!-- toastr -->
+
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/izitoast/iziToast.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/iziModal/iziModal.min.css' %}">
+
+    <!-- moment -->
+
+    <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/lc_style.css' %}">
+    <style>
+        #overlayer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 99999;
+            background: #ffffff;
+        }
+    
+        .loader {
+            display: inline-block;
+            position: absolute;
+            z-index: 999999;
+            top: 40%;
+            left: 45%;
+        }
+    
+        .loader-inner {
+            vertical-align: top;
+            display: inline-block;
+            width: 100%;
+        }
+        .loader-inner img{
+            width: 150px;
+        }
+    
+        .timenav{
+            align-items: center;
+            display: flex;
+            font-size: 16px;
+            color: #720808;
+            font-weight: 800;
+        }
+        .text-bold{
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body class="nk-body bg-lighter npc-default has-sidebar no-touch nk-nio-theme mini-sidebar">
+    
+    <div id="overlayer"></div>
+    <span class="loader">
+        <span class="loader-inner">
+            <img src="{% static 'img/preloader.gif' %}" alt="Logo">
+        </span>
+    </span>
+
+    <div class="main-wrapper">
+
+        <div class="header header-one">
+
+            <div class="header-left header-left-one">
+                <a href="{% url 'home' %}" class="logo">
+                    {% if configuration.hospital_logo %}
+                        <img src="/media/{{ configuration.hospital_logo }}" alt="Logo">
+                    {% else %}
+                        <img src="/static/img/logo.png" alt="Logo">
+                    {% endif %}
+                </a>
+                <a href="{% url 'home' %}" class="white-logo">
+                    <img src="{% static 'img/logo-white.png' %}" alt="Logo">
+                </a>
+                <a href="{% url 'home' %}" class="logo logo-small">
+                    <img src="{% static 'img/logo-small.png' %}" alt="Logo" width="30" height="30">
+                </a>
+            </div>
+
+
+            <a href="javascript:void(0);" id="toggle_btn">
+                <i class="fas fa-bars"></i>
+            </a>
+
+            <div class="top-nav-search hide">
+                <form>
+                    <input type="text" class="form-control" placeholder="Search here">
+                    <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+
+            <a class="mobile_btn" id="mobile_btn">
+                <i class="fas fa-bars"></i>
+            </a>
+
+
+            <ul class="nav nav-tabs user-menu">
+                <li class="nav-item dropdown has-arrow main-drop timenav">
+                    <section> 
+                        <p id="time">--:--:--</p>
+                    </section>
+                </li>
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span class="user-img">
+                            <img src="{% static 'img/avatar-02.jpg' %}" alt="">
+                            <span class="status online"></span>
+                        </span>
+                        <span class="text-bold">{{ user.first_name }} {{ user.last_name }}</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i data-feather="log-out" class="me-1"></i> Sign out
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li class="menu-title"><span>Master</span></li>
+                            
+                            <li class="{% block home_nav %} {% endblock %}">
+                                <a href="{% url 'home' %}"><i data-feather="home"></i> <span>Home</span></a>
+                            </li>
+                            
+                            {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 2 or user.groups.all.0.id == 3 or user.groups.all.0.id == 6 or user.groups.all.0.id == 8 %}
+                                
+                            {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 3 or user.groups.all.0.id == 6 or user.groups.all.0.id == 8  %}
+                                <li class="{% block patient_nav %} {% endblock %}">
+                                    <a href="{% url 'patient' %}">
+                                        <i class="fa fa-wheelchair" data-bs-toggle="tooltip" data-bs-original-title="Patient" aria-label="fa fa-wheelchair"></i>
+                                        <span>Patient</span></a>
+                                </li>
+
+                                <li class="{% block forms_nav %} {% endblock %}">
+                                    <a href="{% url 'forms' %}">
+                                        <i class="fa fa-users" data-bs-toggle="tooltip"  data-bs-original-title="Out-Patients" aria-label="fa fa-users"></i>
+                                         <span>Fitness Form</span></a>
+                                </li>
+
+                                <li class="{% block appointment_nav %} {% endblock %}">
+                                    <a href="{% url 'appointment' %}">
+                                        <i class="fa fa-users" data-bs-toggle="tooltip"  data-bs-original-title="Out-Patients" aria-label="fa fa-users"></i>
+                                         <span>Out-Patients(OP)</span></a>
+                                </li>
+
+                                <li class="{% block upload_reports_nav %} {% endblock %}">
+                                    <a href="{% url 'upload_reports' %}">
+                                        <i class="fa fa-upload" data-bs-toggle="tooltip"  data-bs-original-title="Out-Patients" aria-label="fa fa-users"></i>
+                                         <span>Upload Reports</span></a>
+                                </li>
+                                {% endif %}
+                             
+
+                                <li class="submenu">
+                                    <a href="javascript:void(0)" class="{% block room_nav %} {% endblock %}">
+                                        <i class="fa fa-bed" data-bs-toggle="tooltip"  data-bs-original-title="IP-Rooms" aria-label="fa fa-bed"></i>
+                                        <span>In-Patients(IP)</span><span class="menu-arrow"></span></a>
+                                    <ul>
+                                        {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 3 or user.groups.all.0.id == 6 or user.groups.all.0.id == 8 %}
+                                        <!-- <li><a href="{% url 'room' %}" class="{% block room_view_nav %} {% endblock %}">Room</a></li>  -->         
+                                        <li><a href="{% url 'ward'%}" class="{% block ward_view_nav %} {% endblock %}">Rooms & Wards</a></li>                              
+                                        {% endif %}
+                                        
+                                        <li><a href="{% url 'assign_room'%}" class="{% block assign_room_nav %} {% endblock %}">In-Patients List</a></li>
+                                        <!-- <li><a href="{% url 'assign_ward' %}" class="{% block assign_ward_nav %} {% endblock %}">Assign Ward</a></li> -->
+                                    </ul>
+                                </li>
+                                                               
+
+                            {% endif %}
+
+                        {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 3 or user.groups.all.0.id == 4 %}
+                            <li class="submenu">
+                                <a href="javascript:void(0)" class="{% block lab_nav %} {% endblock %}">
+                                    <i class="fa fa-thermometer-three-quarters text-center" data-bs-toggle="tooltip"  data-bs-original-title="Laboratory" aria-label="fa fa-thermometer-three-quarters"></i>
+                                    <span>Laboratory</span>
+                                    <span class="menu-arrow"></span></a>
+                                <ul>
+
+                                    {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 4 %}
+
+                                    <li>
+                                        <a href="{% url 'lab' %}" class="{% block add_lab_test_nav %} {% endblock %}">Lab Test Master</a>
+                                    </li>
+
+                                    {% endif %}
+
+
+                                    <li>
+                                        <a href="{% url 'lt_from_appointment' %}" class="{% block test_from_appointment_nav %} {% endblock %}">Lab Reports</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
+
+
+                        {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 5 %}
+                            <li class="submenu">
+                                <a href="javascript:void(0)" class="{% block xray_nav %} {% endblock %}"><i data-feather="activity"></i> 
+                                    <span> X-Ray</span>
+                                    <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'xray' %}" class="{% block add_xray_nav %} {% endblock %}">Add X-Ray</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'xray_from_appointment' %}"
+                                            class="{% block xray_from_appointment_nav %} {% endblock %}">X-Ray Test</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        
+                        {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 7 %}
+                            <li class="submenu">
+                                <a href="javascript:void(0)" class="{% block scan_nav %} {% endblock %}">
+                                    <i class="fa fa-universal-access text-center" data-bs-toggle="tooltip"  data-bs-original-title="Scan"></i>
+                                    <span>Scan </span>
+                                    <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li>
+                                        <a href="{% url 'scan' %}" class="{% block add_scan_nav %} {% endblock %}">Add Scan</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'scan_from_appointment' %}"
+                                            class="{% block scan_from_appointment_nav %} {% endblock %}">Scan Checkup</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        
+                        
+
+                            {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 6 %}
+                                <li class="submenu">
+                                    <a href="javascript:void(0)" class="{% block report_nav %} {% endblock %}">
+                                        <i class="fas fa-chart-area" data-bs-toggle="tooltip"  data-bs-original-title="Reports" aria-label="fas fa-chart-area"></i>
+                                         <span>Reports </span>
+                                        <span class="menu-arrow"></span></a>
+                                    <ul>
+                                        <li><a href="{% url 'op_report' %}" class="{% block op_report_nav %} {% endblock %}">OP Report </a></li>
+                                        <li><a href="{% url 'room_report' %}" class="{% block room_report_nav %} {% endblock %}">IP Report </a></li>
+                                        <!-- <li><a href="{% url 'ward_report' %}" class="{% block ward_report_nav %} {% endblock %}">Ward Report </a></li> -->
+                                        <li><a href="{% url 'overall_report' %}" class="{% block overall_report_nav %} {% endblock %}">Over All Report </a></li>
+                                        <li><a href="{% url 'cashier_report' %}" class="{% block cashier_report_nav %} {% endblock %}">Cashier Report </a></li>
+                                        <li><a href="{% url 'date_wise_collection_report' %}" class="{% block date_wise_collection_report_nav %} {% endblock %}">Date Wise Collection</a></li>
+                                        <li><a href="/accounts/patient_report/0" class="{% block patient_report_nav %} {% endblock %}">Patient Report </a></li>
+                                        <li><a href="{% url 'lab_report' %}" class="{% block lab_report_nav %} {% endblock %}">Lab Report </a></li>
+                                        <li><a href="{% url 'xray_report' %}" class="{% block xray_report_nav %} {% endblock %}">Xray Report </a></li>
+                                        <li><a href="{% url 'scan_report' %}" class="{% block scan_report_nav %} {% endblock %}">Scan Report </a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
+                            
+                            
+                            {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 2 or user.groups.all.0.id == 8 %}
+
+                                <li class="{% block doctor_checkup_nav %} {% endblock %}">
+                                    <a href="{% url 'doctor_checkup' %}">
+                                        <i class="fa fa-user-md" data-bs-toggle="tooltip"  data-bs-original-title="Doctor Checkup" aria-label="fa fa-user-md"></i>
+                                        <span>Doctor Checkup</span></a>
+                                </li>
+
+                                <li class="{% block health_checkup_nav %} {% endblock %}">
+                                    <a href="{% url 'master' %}">
+                                        <i class="fa fa-cogs" data-bs-toggle="tooltip"  data-bs-original-title="Health Checkup Master" aria-label="Health Checkup Master"></i>
+                                        <span>Health Checkup Master</span></a>
+                                </li>
+
+                            {% endif %}
+
+
+                            {% if user.groups.all.0.id == 1 %}
+                            <li class="submenu">
+                                <a href="javascript:void(0)" class="{% block Management_nav %} {% endblock %}">
+                                    <i class="fa fa-server" data-bs-toggle="tooltip"  data-bs-original-title="Management" aria-label="fa fa-server"></i>
+                                    <span> Management </span>
+                                    <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li><a href="{% url 'doctor' %}" class="{% block doctor_nav %} {% endblock %}">Doctor </a></li>
+                                    <li><a href="{% url 'staff' %}" class="{% block staff_nav %} {% endblock %}">Staff </a></li>
+                                </ul>
+                            </li>
+                            <li class="{% block Configuration_nav %} {% endblock %}">
+                                <a href="{% url 'configuration' %}">
+                                    <i class="fa fa-cogs" data-bs-toggle="tooltip"  data-bs-original-title="Configuration" aria-label="Configuration"></i>
+                                    <span>Configuration</span></a>
+                            </li>
+                            {% endif %}
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="page-wrapper">
+            {% block main_content %} {% endblock %}
+        </div>
+
+        <div class="footer footer-one">
+
+           
+            <div class="row" style="padding: 5px 15px;">
+                <div class="col-md-6 col-12">
+                    <img src="{% static 'img/logo.png' %}" style="height: 40px;">
+                </div>
+                <div class="col-md-6 col-12 text-end text-bold">
+                    <img src="{% static 'img/brandlogo.png' %}" style="width: 50px;">
+                    Lintcloud IT Services
+                </div>
+            </div>
+        </div>
+
+    </div>
+   
+
+    {% block extra_css %}
+
+   
+
+    {% endblock %}
+
+
+    <script src="{% static 'js/lib/jquery-3.6.0.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/lib/daterangepicker.min.js' %}"></script>
+
+    <script src="{% static 'js/lib/bootstrap.min.js' %}"></script>
+
+    <script src="{% static 'js/lib/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'js/lib/feather.min.js' %}"></script>
+
+    <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+
+    <script src="{% static 'plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+
+    <script src="{% static 'plugins/izitoast/iziToast.min.js' %}"></script>
+
+
+    <script src="{% static 'plugins/iziModal/iziModal.min.js' %}"></script>
+
+    <script src="{% static 'plugins/sweetalert2/sweetalert2.all.min.js' %}"></script>
+
+    <!-- Typeahead -->
+
+    <script src="{% static '/plugins/typeahead/typeahead.bundle.min.js' %}"></script>
+
+
+
+    <!-- Datatable -->
+
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/datatables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/datatables/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/buttons.print.min.js' %}"></script>
+    <script src="{% static 'js/lib/sum().js' %}"></script>
+
+
+    <script src="{% static 'js/lib/jquery.cookie.js' %}"></script>
+
+
+    <!-- Select2 -->
+
+    <script src="{% static 'plugins/select2/js/select2.min.js' %}"></script>
+
+ 
+
+    <script src="{% static 'js/script.js' %}"></script>
+   
+    <!-- Canvas -->
+
+    <script src="{% static 'plugins/canvas/jspdf.min.js' %}"></script>
+    <script src="{% static 'plugins/canvas/html2canvas.js' %}"></script>
+    <script src="{% static 'plugins/canvas/printThis.min.js' %}"></script>
+    <script src="{% static 'plugins/canvas/printThis.js' %}"></script>
+    <script>
+     const time = document.getElementById("time")
+
+        function getCurrentTime () {
+        const currentDate = new Date(),
+        hours = currentDate.getHours(),
+        minutes = formatTime(currentDate.getMinutes()),
+        seconds = formatTime(currentDate.getSeconds()),
+        formatHours = formatTime(((hours + 11) % 12 + 1)),
+        format = (hours < 12) || (hours == 24)  ? 'AM' : 'PM'
+        time.innerHTML = `${formatHours}:${minutes}:${seconds} <small>${format}</small>`
+        }
+
+        function formatTime (value)  {
+        return value < 10 ? `0${value}` : value
+        }
+
+        setInterval(getCurrentTime, 1000);
+    </script>
+
+    {% block extra_js %}
+
+    {% endblock %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type="text/javascript">toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+
+
+</body>
+
+
+
+</html>

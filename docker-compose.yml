@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  hms_lc:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/webapps/lint_hospital
+    
+    container_name: hms_lc
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+  
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=lintcloud
+      - POSTGRES_DB=lintcloud_hms
+
+volumes:
+  postgres_data:
+
+

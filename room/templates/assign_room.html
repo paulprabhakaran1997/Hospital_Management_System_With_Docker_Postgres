@@ -1,0 +1,1216 @@
+{% extends 'base.html' %} {% load static %} {% block room_wards_nav %} active {% endblock %} {% block assign_room_nav %} active {% endblock %} {% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="DoctorData" data-val="{{ doctordata }}">
+
+    <input type="hidden" id="GetPatientDataUrl" data-url="{% url 'get_patient_data' %}">
+    <input type="hidden" id="get_room_data_url" data-url="{% url 'get_room_data' %}">
+    <input type="hidden" id="GetPatientDataOnSearch" data-url="{% url 'get_patient_data_onsearch' %}">
+    <input type="hidden" id="assignroom_doctor_checkup" data-url="{% url 'assignroom_doctor_checkup' %}">
+    <input type="hidden" id="discharge_patient" data-url="{% url 'discharge_patient_ip' %}">
+
+
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Assign Room</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Assign Room</li>
+                </ul>
+            </div>
+            {% if user.groups.all.0.id == 1 or user.groups.all.0.id == 3 or user.groups.all.0.id == 6 %}
+            <div class="col-auto addNewBtnSection">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn ">
+                    <i class="fas fa-plus"></i> Assign Room 
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="col-auto backBtnSection hide">
+                <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold  printBtn Dsm_DownloadReport dischargeSummary_Print_section">
+                    <i class="fas fa-print"></i> Print
+                </a>
+
+                <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <section class="AssignedRoomListDTSection">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="assignedRoomListDT">
+                                <thead class="thead-light"></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="AssignRoom hide">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="patient">Select Patient</label>
+                                <div class="col-sm-12">
+                                    <!-- <select name="patient" id="patient" class="form-control" required>
+
+                                    </select> -->
+                                    <input type="text" class="form-control" name="patient_typeahead" id="patient_typeahead" placeholder="Search Patient" autofocus>
+                                </div>
+                            </div>                        
+                            
+                    
+                        </div>
+
+                        <form id="addAssignRoomsForm"  enctype="multipart/form-data">
+
+                            <input type="hidden" id="assignroomId" name="assignroomId" value="0" />
+                            <input type="hidden" name="patient" id="patient" value="0" >
+                            
+                            <div class="patientDetailsSection" style="display: none;">
+                               
+                                <div class="row form-group">
+
+                                    <div class="col-md-4">
+                                        <div class="col-md-12" style="padding-right: 0px;">
+                                            <label>Patient ID : <span class="patientInfoText"
+                                                    id="appointed_PatientId"></span></label>
+                                        </div>
+        
+                                        <div class="col-md-12 px-0">
+                                            <label>Name : <span class="patientInfoText"
+                                                    id="appointed_PatientName"></span></label>
+                                        </div>
+        
+                                        <div class="col-md-12">
+                                            <label>Age : <span class="patientInfoText"
+                                                    id="appointed_PatientAge"></span></label>
+                                        </div>
+        
+                                        <div class="col-md-12">
+                                            <label>Gender : <span class="patientInfoText"
+                                                    id="appointed_PatientGender"></span></label>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label>Place : <span class="patientInfoText"
+                                                    id="appointed_PatientPlace"></span></label>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label>Phone: <span class="patientInfoText"
+                                                    id="appointed_PatientMobile"></span></label>
+                                        </div>
+
+                                    </div>
+    
+                                    <div class="col-md-8 row">                                        
+                                        <div class="col-sm-6">
+                                            <label for="room" class="col-form-label input-label">Room No</label>
+                                            <select name="room" class="room" class="form-control" required></select>
+                                        </div>
+                                        
+                                        <div class="col-sm-6">
+                                            <label for="assigned_date" class="col-form-label input-label">Assigned Date</label>
+                                            <input type="datetime-local" name="assigned_date" id="assigned_date" class="form-control">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label for="reason" class="col-form-label input-label">Reason</label>
+                                            <div class="col-sm-12">
+                                                <textarea type="text" rows="2" id="reason" name="reason" class="form-control" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    
+                                </div>
+                            
+                                <div class="text-end proceedBtnSection">
+                                    <button type="submit" class="btn btn-primary submitBtn">Proceed</button>
+                                </div>                          
+                            </div>
+                            
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="Doctor_Prescription_Section hide">
+      
+        <div class="card-body alert alert-success alert-dismissible">
+            <div class="row">
+                <div class="col-6">
+                    <div class="text-left">
+                
+                        <h4 class="text-dark">Patient Name: <span class="patientInfoText appointedPatientName"></span></h4>
+                        <h6 class="text-dark">
+                            Age & Gender: <span class="patientInfoText appointedPatientAge"></span> Yrs/
+                            <span class="patientInfoText appointedPatientGender"></span>
+                        </h6>
+                        <h6 class="text-dark">Contact: <span class="" id="">988765545151521</span></h6>
+                        <h6 class="text-dark">Place: <span class="patientInfoText appointedPatientPlace"></span></h6>
+                    </div>
+                </div>
+                <div class="col-6 text-end">
+                    <h4 class="text-danger">IP ID: <span class="IPAdmitID"></span></h4>
+                    <h6>Room No: <span class="IPRoomNo"></span></h6>
+                    <h6>Admit Date: <span class="IPAdmitDate" id=""></span></h6>
+                    <h6>Reason: <span class="IPAdmitReason"></span></h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="card report-card" style="margin-bottom: 15px !important;">
+            <div class="card-body pb-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="app-listing">
+
+                            <li  id="doctor_report">
+                                <div class="multipleSelection active">
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fas fa-clipboard me-1 select-icon" style="font-size: 18px;"></i>  Patient Summary</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="doctorCheckupBtn" id="assign_doctorCheckupBtn">
+                                <div class="multipleSelection">
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fas fa-user-md me-1 select-icon" style="font-size: 18px;"></i>  Doctor Checkup</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="view_payment_Btn_section view_payment_Btn">
+                                <div class="multipleSelection" >
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fa fa-file me-1 select-icon" style="font-size: 18px;"></i> View Payment</p>
+                                    </div>
+                                </div>                                
+                            </li> 
+
+                            <li class="Transfer_Btn_section" id="transfer_Btn" data-toggle="modal" data-target="#TransferFormModal">
+                                <div class="multipleSelection" >
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fas fa-exchange-alt me-1 select-icon" style="font-size: 20px;"></i>Transfer</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="discharge_summaryBtn" id="discharge_summary_Btn">
+                                <div class="multipleSelection">
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fa fa-edit me-1 select-icon" style="font-size: 18px;"></i>  Summary</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="Discharge_Btn_section" id="discharge_Btn">
+                                <div class="multipleSelection" >
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fas fa-user-slash me-1 select-icon" style="font-size: 18px;"></i> Discharge</p>
+                                    </div>
+                                </div>                                
+                            </li>
+
+                            <li class="genarateBill_btn" id="genarate_billBtn">
+                                <div class="multipleSelection">
+                                    <div class="selectBox">
+                                        <p class="mb-0"><i class="fa fa-file me-1 select-icon" style="font-size: 18px;"></i> Genarate Bill</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </section>
+
+    
+    <section class="Doctor_test_Section hide">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">                  
+                    <div class="card-body">                       
+                        <form id="DoctorPrescriptionForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                            
+                            <input type="hidden" id="IP_assignid" name="IP_assignid" />                            
+                            <input type="hidden" name="patientId" id="patientId">
+                            <input type="hidden" name="pos_id" id="pos_id">
+                            <input type="hidden" name="roomId" id="roomId">
+                            <input type="hidden" name="initially_paid" id="initially_paid">
+                          
+
+                            <div class="Allmedicine hide">
+                                <div class="row form-group">
+                            
+                                    <div class="col-md-6">
+                                        <h5>Visited (Doctor)</h5>
+                                        <div class="col-sm-12">
+                                            <select name="doctor" id="doctor" class="form-control" required>
+                                                <option></option>                            
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Dressing</h5>
+                                        <div class="col-sm-12">
+                                            <input class="form-group form-control" type="text" name="dressing" id="dressing" value="0">    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="card-title">Lab</h5>
+                                        <div class="col-sm-12">
+                                            <select name="lab" id="lab" class="form-control labtest" multiple>
+                                                {% for obj in labgroupdata %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="col-md-4">
+                                        <h5 class="card-title">Xray</h5>
+                                        <div class="col-sm-12">
+                                            <select name="xray" id="xray" class="form-control XrayTest" multiple>
+                                                {% for obj in xraydata %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="col-md-4">
+                                        <h5 class="card-title">Scan</h5>
+                                        <div class="col-sm-12">
+                                            <select name="scan" id="scan" class="form-control ScanTest" multiple>
+                                                {% for obj in scandata %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                            
+                                </div>
+                            
+                                <div class="row form-group " style="margin-top: 30px;">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title">Injection Details</h5>
+                                    </div>
+                                    <div class="col-md-6" style="text-align: end;">
+                                        <a href="javascript:void(0)" class="btn btn-primary me-1 add_injection_btn">
+                                            <i class="fas fa-syringe"></i> Add Injection
+                                        </a>
+                                    </div>
+                                </div>
+                            
+                                <section id="InjectioListSection" class="additional_Il"></section>
+                            
+                                <div class="row form-group">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title">Medicine Details</h5>
+                                    </div>
+                            
+                                    <div class="col-md-6 text-end">
+                                        <a href="javascript:void(0)" class="btn btn-primary me-1 add_medicine_btn">
+                                            <i class="fas fa-pills"></i> Add Medicine
+                                        </a>
+                                    </div>
+                                </div>
+                            
+                                <section id="MedicineListSection" class="additional_ml">
+                            
+                                </section>
+                            
+                            
+                                <div class="row form-group">
+                                    <div class="col-md-12 mb-3">
+                                        <h4 class="card-title">Prescription</h4>
+                                        <textarea name="prescription" id="prescription" rows="4" class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <h5 class="card-title"><i class="fa fa-stethoscope"></i> Medical Prescription</h5>                                                
+                                        </div>
+                                        <textarea name="medical_prescription" id="medical_prescription" rows="4" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            
+                            
+                                <div class="row form-group">
+                                    <div class="col-md-12 text-center">
+                                        <button type="submit" class="btn btn-primary okBtn AppointmentBtn">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+  
+        </div>
+    </section>
+
+
+    <section class="patient_history_section hide History_Details">
+        <div class="row"></div>
+    </section>
+
+
+    <section class="Genarate_Bill_section  hide">
+        <div class="row">
+            <div class="col-md-12">
+               
+
+                <form id="Discharge_PaymentForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                    <input type="hidden" name="lab_amount" id="lab_amount" value="0">
+
+                    <input type="hidden" name="xray_amount" id="xray_amount" value="0">
+
+                    <input type="hidden" name="scan_amount" id="scan_amount" value="0">
+
+                    <input type="hidden" name="room_amount" id="room_amount" value="0">
+                        
+                        <div class="row form-group hide" >
+
+                            <div class="col-md-2" style="padding-right: 0px;">
+                                <label>Id : <span class="patientInfoText appointedPatientId"></span></label>
+                            </div>
+
+                            <div class="col-md-4 ">
+                                <label>Name : <span class="patientInfoText appointedPatientName"></span></label>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>Age : <span class="patientInfoText appointedPatientAge"></span></label>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>Gender : <span class="patientInfoText appointedPatientGender"></span></label>
+                            </div>
+
+                            <div class="col-md-2">
+                                <input type="hidden" id="appointedDate_value" >
+                                <label>Date : <span class="patientInfoText appointedDate" 
+                                        id="appointedDate"></span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="row form-group">
+
+                            <div class="col-md-7">
+                                <div class="card">
+                                    <div class="card-header p-3" >
+                                        <div class="d-flex justify-content-between align-items-end" >
+                                            <h3 class="card-title">Patient IP Charges</h3>
+                                            <h6 class="card-title OP_charges">OP Charges : <span id="OP_chargesText"></span></h6>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="room_charge" class="col-form-label input-label">Room Charge : <span
+                                                        class="room_chargeText"></span></label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="room_charge" value="0" name="room_charge"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="doctor_fees" class="col-form-label input-label">Doctor Fees</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="doctor_fees" value="0" name="doctor_fees"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="nursing_charge" class="col-form-label input-label">Nursing Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="nursing_charge" value="0" name="nursing_charge"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="establishment_charges" class="col-form-label input-label">Establishment Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="establishment_charges" value="0" name="establishment_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="iv_fluid_charges" class="col-form-label input-label">I.V Fluid Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="iv_fluid_charges" value="0" name="iv_fluid_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="icu_charges" class="col-form-label input-label">I.C.U Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="icu_charges" value="0" name="icu_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="physiotherapy_charges" class="col-form-label input-label">Physiotherapy Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="physiotherapy_charges" value="0" name="physiotherapy_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="surgery_charges" class="col-form-label input-label">Surgery Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="surgery_charges" value="0" name="surgery_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="consultant_charges" class="col-form-label input-label">Consultant Charge</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="consultant_charges" value="0" name="consultant_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="dressing_charges" class="col-form-label input-label">Dressing Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="dressing_charges" value="0" name="dressing_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="miscellaneous_charges" class="col-form-label input-label">Miscellaneous Charges</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="miscellaneous_charges" value="0" name="miscellaneous_charges"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4">
+                                                <label for="injection" class="col-form-label input-label">Injection</label>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="injection" value="0" name="injection" class="feesAmount form-control"
+                                                        placeholder="0.00">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-4 mt-3">
+                                                <h5 class="page-title">Lab Fees : ₹ <span class="patientInfoText Lab_fees "></span></h5>
+                                                <span >Paid:  <span id="paid_lab_amountText"></span></span>
+                                            </div>
+                                    
+                                            <div class="col-md-4 mt-3">
+                                                <h5 class="page-title">Xray Fees : ₹ <span class="patientInfoText Xray_fees "></span></h5>
+                                                <span >Paid:  <span id="paid_xray_amountText"></span></span>
+                                            </div>
+                                    
+                                            <div class="col-md-4 mt-3">
+                                                <h5 class="page-title">Scan Fees : ₹ <span class="patientInfoText Scan_fees "></span></h5>
+                                                <span >Paid:  <span id="paid_scan_amountText"></span></span>
+                                            </div>
+                                    
+                                        </div>
+
+                                        <hr class="my-3">
+
+                                        <div class="amountSection paymentSection mt-1 row">
+
+                                            <div class="totalAmountView col-md-12 text-end">
+                                                <h4 class="amountLabel text-success">Total: ₹ <span class="amountLabelValue" id="overall_totaltext">0</span></h4> 
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="discount" class="col-form-label input-label">Discount (Amount in Rs.)</label>
+                                                <input type="number" class="form-control discountValue" min="0" name="discount" value="0" id="discount">
+                                            </div>
+
+                                            <div class="col-md-8 text-end">
+                                                <br>
+                                                <h4 class="amountLabel mt-3 text-primary">After Discount : ₹ 
+                                                <span class="amountLabelValue" id="totalAmount_after_discountText">0</span></h4>
+                                            </div>
+                
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="card">
+                                        <div class="card-header p-3" >
+                                            <h3 class="card-title">Get Payment</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row form-group amountSection">
+
+                                                <input type="hidden" name="in_PatientPaymentId" id="in_PatientPaymentId" value="0">
+                                                <input type="hidden" name="firstPayment" id="firstPayment" value="0">
+                                                <input type="hidden" name="existing_balance" id="existing_balance" value="0">
+                                                <input type="hidden" name="balanceValue" id="balanceValue" value="0">
+                                                <input type="hidden" name="nowPayingAmount" id="nowPayingAmount" value="0">
+                                                <input type="hidden" name="paymentReceived" id="paymentReceived" value="0">
+                                                <input type="hidden" name="overallBalance" id="overallBalance" value="0">
+                                                <input type="hidden" name="overallTotal" id="overallTotal" value="0">
+                                                <input type="hidden" name="totalAmount_after_discount" id="totalAmount_after_discount" value="0">
+                                                <input type="hidden" name="discount_amount" id="discount_amount" value="0">
+                                                <input type="hidden" name="existing_discount" id="existing_discount" value="0">
+                
+
+                                                <div class="totalAmountView col-md-12 text-center">
+                                                    <h4 class="amountLabel text-success">Total: ₹ <span class="amountLabelValue" id="IP_Total_Amount">0</span></h4> 
+                                                </div>
+                                                
+                                                <hr class="my-3">
+
+                                                <div class="col-md-4 amountCollection cash_collection_col">
+                                                    <label for="cash" class="col-form-label input-label">Cash</label>
+                                                    <input type="number" class="form-control amountCollectionValue cashValue" min="0" name="cash" value="0" id="cash">
+                                                </div>
+                
+                                                <div class="col-md-4 amountCollection upi_collection_col">
+                                                    <label for="upi" class="col-form-label input-label">UPI</label>
+                                                    <input type="number" class="form-control amountCollectionValue upiValue" min="0" name="upi" value="0" id="upi">
+                                                </div>
+            
+                                                <div class="col-md-4 amountCollection card_collection_col">
+                                                    <label for="card" class="col-form-label input-label">Debit Card</label>
+                                                    <input type="number" class="form-control amountCollectionValue cardValue" min="0" name="card" value="0" id="card">
+                                                </div>
+            
+                                               
+                
+                                                <div class="col-md-6 existingPaidAmountView mt-3" style="display: none;">
+                                                    <label class="amountLabel">Paid: ₹ <span class="amountLabelValue"
+                                                            id="existingpaidAmountText">0</span></label> <br>
+            
+                                                    <label class="amountLabel">Discount: ₹ <span class="amountLabelValue"
+                                                            id="existingDiscountText">0</span></label>
+                                                </div>
+
+                                                <div class="col-md-6 amountSection paymentSection mt-3">
+                                                   
+                                                    <div class="paidAmountView col-md-12">
+                                                        <h5 class="amountLabel">Paying: ₹ 
+                                                            <span class="amountLabelValue" id="nowPayingAmountText">0</span></h5>
+                                                    </div>
+                        
+                                                    <div class="balanceAmountView col-md-12">
+                                                        <label class="text-danger">Balance: ₹ <span class="amountLabelValue" id="balanceAmountText">0</span></label>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        
+                        <div class="text-end submitBtnSection">
+                            <button type="submit" class="btn btn-primary submitBtn">Process Payment</button>
+                        </div>
+                </form>
+                   
+            </div>
+        </div>
+
+
+    </section>
+
+
+    <section class="dischargeSummary_section hide">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card" style="border:1px solid #e7ebef">
+                    <div class="card-header">
+                        <h4 class="card-title"> Discharge Summary Editor
+                            <button class="btn btn-primary me-1 View-Summary pull-right hide"><i class="fa fa-expand"></i> View Summary </button>
+                        </h4>
+                    </div>
+                    <div class="card-body">
+
+                        <form id="discharge_SummaryForm"  enctype="multipart/form-data">
+                            <input type="hidden" id="discharge_summary_id" name="discharge_summary_id" value="0" />
+                            <div class="row">
+                                                        
+                                <div class="mb-3 col-md-4">
+                                    <label for="consultant" class="form-label">Consultant</label>
+                                    <select name="consultant" id="consultant" class="form-control" required>
+                                        <option></option>
+                                    </select>
+                                </div>
+                            
+                                <div class="mb-3 col-md-4">
+                                    <label for="dof_surgery" class="form-label ">Date Of Surgery</label>
+                                    <input type="date" id="dof_surgery" name="dof_surgery" class="form-control" autofocus required>
+                                </div>
+                            
+                                <div class="mb-3 col-md-4">
+                                    <label for="dof_discharge" class="form-label ">Date Of Discharge</label>
+                                    <input type="date" id="dof_discharge" name="dof_discharge" class="form-control" autofocus required>
+                                </div>
+                            
+                                <div class="mb-4 col-md-6">
+                                    <label for="allergies" class="form-label ">Allergies</label>
+                                    <textarea id="allergies" rows="3" name="allergies" class="form-control" autofocus required></textarea>
+                                </div>
+                            
+                                <div class="mb-3 col-md-6">
+                                    <label for="diagnosis" class="form-label ">Diagnosis</label>
+                                    <textarea id="diagnosis" rows="3" name="diagnosis" class="form-control" autofocus required></textarea>
+                                </div>
+                            
+                                <div class="mb-3 col-md-6">
+                                    <label for="investigation" class="form-label ">Investigations</label>
+                                    <textarea id="investigation" rows="3" name="investigation" class="form-control" autofocus required></textarea>
+                                </div>
+                            
+                                <div class="mb-3 col-md-6">
+                                    <label for="treatment" class="form-label ">Treatement</label>
+                                    <textarea id="treatment" rows="3" name="treatment" class="form-control" autofocus required></textarea>
+                                </div>
+                            
+                                <div class="mb-3 col-md-12">
+                                    <label for="advice_discharge" class="form-label ">Advice on Discharge</label>
+                                    <textarea id="advice_discharge" rows="3" name="advice_discharge" class="form-control" autofocus
+                                        required></textarea>
+                                </div>
+                            
+                            </div>
+                            <div class="mt-2">
+                                <button type="submit" class="btn btn-primary me-2 dsm_submitBtn">Create Summary</button>
+                            </div>                            
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+  
+        </div>
+
+    </section>
+
+
+    <section class="invoicePrintSection hide">
+
+        <div class="row">
+            <div class="col-md-12" style="text-align: end;">
+                <div class="col-auto printBtnSection ">
+                    <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold  printBtn Payment_DownloadReport">
+                        <i class="fas fa-print"></i> Print
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center Payment_canvas_div_pdf">
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body">
+                       
+                        <div class="invoice-item">
+                            <div class="row">
+                                <div class="col-md-6" style="width: 65%;">
+                                    <div class="invoice-logo mb-2">
+                                        {% if configuration.hospital_logo %}
+                                            <img src="/media/{{ configuration.hospital_logo }}" alt="Logo">
+                                        {% else %}
+                                            <img src="/static/img/logo.png" alt="Logo">
+                                        {% endif %}
+                                    </div>
+                                    <div class="invoice-info" style="width: 100%;">
+                                        <p class="invoice-details invoice-details-two p-2">
+                                           Life is a Gift... Live it Well...
+                                        </p>
+                                    </div>
+                                   
+                                </div>
+    
+                                <div class="col-md-6" style="width: 35%;">
+                                    <div class="invoice-info">
+                                        <p class="invoice-details">
+                                            {{ configuration.hospital_address1 }}<br> 
+                                            {{ configuration.hospital_address2 }} Pincode-{{ configuration.hospital_pincode }}<br>                                            
+                                            <strong>Ph: {{ configuration.hospital_phone }}<br>
+                                            Email: {{ configuration.hospital_email }}</strong>
+                                        </p>
+                                    </div>
+    
+                                   
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="invoice-item py-1">
+                            <div class="row">
+                                <div class="col-md-6" style="width: 80%;">
+                                    <div class="invoice-info">
+                                        <strong class="customer-text mb-1">Billing Details</strong>
+                                        <p class="invoice-details invoice-details-two" style="width: 100%;">
+                                            Patient ID: <span id="invoice_PatientId" class="appointedPatientId"></span> <br> 
+                                            Patient Name: <span id="invoice_PatientName" class="appointedPatientName"></span> <br> 
+                                            Age & Gender: <span id="invoice_PatientAge" class="appointedPatientAge"></span>Yrs / <span class="appointedPatientGender"></span>
+                                            
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="width: 20%;">
+                                    <div class="invoice-details">
+                                        <strong class="customer-text mb-1">&nbsp;</strong>
+                                        <p><strong>Date:</strong> <span class="IPAdmitDate"></span><br>
+                                        <strong>I.P ID:</strong> <span class="IPAdmitID"></span></p>
+                                    </div>
+                                </div>
+                                   
+                            </div>
+                                
+                        </div>
+
+
+                        <div class="invoice-item invoice-table-wrap">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="table-responsive">
+                                        <table class="invoice-table table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Description</th>
+                                                    <th class="text-end">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="IP_Invoice_Section InvoiceSection"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                               
+
+                                <div class="col-lg-6 col-md-6" style="width: 50%;">
+                                    <div class="invoice-total-card">
+                                        <div class="invoice-total-box">
+                                            <div class="invoice-total-inner">
+                                                <p style="color: #7638FF;">Payment Mode</p>
+                                                <div class="IP_Payment_Section InvoiceSection"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="invoice-total-card mt-2 Invoice_TransactionSection" >
+                                        <div class="invoice-total-box">
+                                            <div class="invoice-total-inner">
+                                                <p style="color: #7638FF;">Transaction Info</p>
+                                                <p>Paid <span class="Invoice_Paid">0</span></p>
+                                                <p class="mb-0">Balance <span class="Invoice_Balance">0</span></p>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-lg-6 col-md-6" style="width: 50%;">
+                                    <div class="invoice-total-card">
+                                        <div class="invoice-total-box">                                            
+                                            <div class="invoice-total-inner Invoice_AmountSection InvoiceSection"></div>
+                                            <div class="invoice-total-footer Invoice_AmountTotal InvoiceSection"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="DischargeSummary_List_CardSection hide">
+        <div class="row">
+                <div class="col-md-6 d-flex">
+                    <div class="card PL_Card flex-fill">
+                        <div class="card-header text-center">
+                            <h5 class="card-title mb-0 dsm_patient_name"></h5>
+                        </div>
+                        <div class="card-body text-center">
+                            
+                            <a class="card-link Dsm_Edit_Btn"  href="javascript:void(0)">Edit</a>
+                            <a class="card-link Dsm_View_Btn"  href="javascript:void(0)">View</a>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </section>
+
+
+    <section class="dischargeSummary_Print_section hide">
+       
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card">
+                    <div class="card-header">
+                        <h4 class="card-title"> Discharge Summary Report View
+                            <button class="btn btn-primary me-1 Edit-Summary pull-right hide"><i class="fa fa-edit"></i> Edit Summary </button>
+                        </h4>
+                    </div>
+                    <div class="card-body Dsm_canvas_div_pdf">
+                        <div class="borders" style="width:100%;border-radius: 10px;">
+                            
+
+                            <div class="address">
+                                <div class="row">
+                                    <div class="col-md-3" style="width: 25%;">
+                                        <div class="invoice-logo">
+                                            <img src="/static/img/logo-small.png" alt="Logo" style="width: 150px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="width: 50%;">
+                                        <div class="address" style="display: block; text-align: center; margin-bottom: 30px;">
+                                           
+                                            <h3 style="font-weight: 800;"> {{ configuration.hospital_name }}</h3>
+                                            <h5> {{ configuration.hospital_address1 }} {{ configuration.hospital_address2 }} Pincode-{{ configuration.hospital_pincode }}</h5>
+                                            <h6> Email: {{ configuration.hospital_email }}</h6>
+                                            <h6>Ph No.:{{ configuration.hospital_phone }}, Hospital Reg. No.: {{ configuration.hospital_registeration_number }}</h6>
+                                            <br>
+                                            <h3><b>Discharge Summary</b></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="width: 25%;">
+                                        <div class="invoice-logo">
+                                            <img src="/static/img/nabh-logo.png" alt="Logo" style="width: 150px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="generalinformation" style="width:100%; margin-top: 20px;">
+                                <div class="mb-3 col-md-12 text-center">
+                                    <h4> Patient Details</h4>
+                                </div>
+
+                                <div class="row mt-3 justify-content-between">
+
+                                    <div class="col-6 col-md-5 col-lg-5">
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-5">Patient ID</h6>
+                                            <h6 class="col-7"><span class="dsm_patient_id"> </span></h6>        
+                                        </div>
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-5">Patient Name</h6>
+                                            <h6 class="col-7"><span class="dsm_patient_name"> </span></h6>        
+                                        </div>                                       
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-5">Age & Gender</h6>
+                                            <h6 class="col-7"><span class="dsm_patient_age"></span> & <span class="dsm_patient_gender "></span></h6>        
+                                        </div>
+    
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-5">Address</h6>
+                                            <h6 class="col-7"><span class="dsm_address"> </span></h6>        
+                                        </div>
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-5">Consultant</h6>
+                                            <h6 class="col-7"><span class="dsm_consultant"> </span></h6>        
+                                        </div>
+
+                                        
+                                    </div>   
+                                    
+                                    <div class="col-6 col-md-6 col-lg-6">
+                                       
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-6">IP ID</h6>
+                                            <h6 class="col-6"><span class="dsm_ip_no"> </span></h6>        
+                                        </div>
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-6">Room No</h6>
+                                            <h6 class="col-6"><span class="dsm_room_no"> </span></h6>        
+                                        </div>
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-6">Date Of Admission</h6>
+                                            <h6 class="col-6"><span class="dsm_dof_admission"> </span></h6>        
+                                        </div>
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-6">Date Of Discharge</h6>
+                                            <h6 class="col-6"><span class="dsm_dof_discharge"> </span></h6>        
+                                        </div>
+
+                                        <div class="mb-2 row" >
+                                            <h6 class="col-6">Date Of Surgery</h6>
+                                            <h6 class="col-6"><span class="dsm_dof_surgery"> </span></h6>        
+                                        </div>
+                                        
+                                    </div>                                  
+                                </div>
+                                
+                                <div class="mb-3 mt-3 col-md-12 text-center">
+                                    <h4> Summary Details</h4>
+                                </div>
+
+                                <div class="row mt-3">
+        
+                                    <div class="mb-4 col-md-12" >
+                                        <h6 class="mb-2"><i class="fa fa-caret-right"></i> Allergies:</h6>
+                                        <h6>&ensp;<span class="dsm_allergies"> </span></h6>
+                                    </div>
+
+                                    <div class="mb-4 col-md-12" >
+                                        <h6 class="mb-2"><i class="fa fa-caret-right"></i> Diagnosis:</h6>
+                                        <h6>&ensp;<span class="dsm_diagnosis"> </span></h6>
+                                    </div>
+
+                                    <div class="mb-4 col-md-12" >
+                                        <h6 class="mb-2"><i class="fa fa-caret-right"></i> Investigations:</h6>
+                                        <h6>&ensp;<span class="dsm_investigation"> </span></h6>
+                                    </div>
+
+                                    <div class="mb-4 col-md-12" >
+                                        <h6 class="mb-2"><i class="fa fa-caret-right"></i> Treatement:</h6>
+                                        <h6>&ensp;<span class="dsm_treatment"> </span></h6>
+                                    </div>
+
+                                    <div class="mb-4 col-md-12" >
+                                        <h6 class="mb-2"><i class="fa fa-caret-right"></i> Advice on Discharge:</h6>
+                                        <h6>&ensp;<span class="dsm_advice"> </span></h6>
+                                    </div>
+        
+                                    <div class="mb-3 col-md-12">
+                                        <h6 class="pull-right p-3">Medical Officer</h6>
+                                    </div>
+        
+                                </div>
+                                
+                            </div>
+                        </div>
+        
+        
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="modal" id="TransferFormModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer Details</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+
+                <form action="{% url 'transfer_room' %}" method="post" id="TransferForm">{% csrf_token %}
+
+                    <input type="hidden" id="transfer_IP_id" name="transfer_IP_id" value="0">
+                    <input type="hidden" id="transfer_room_id" name="transfer_room_id" value="0">
+
+                    <div class="modal-body">
+
+
+                            <div class="row mb-2">
+                                <div class="col-md-12">
+                                    <label for="room" class="col-form-label input-label">Room No</label>
+                                    <select name="room" class="room" class="form-control" required></select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="transfer_reason" class="col-form-label input-label">Reason</label>
+                                    <textarea type="text" rows="2" id="transfer_reason" name="transfer_reason" class="form-control"  placeholder="Enter Reason"></textarea>
+                                </div>
+
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary formSubmitBtn">Transfer</button>
+                            </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="refundModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Refund Details</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+
+                <form action="{% url 'ip_refund' %}" method="post" id="IP_refundForm">{% csrf_token %}
+                    <input type="hidden" name="ip_id_for_refund" id="ip_id_for_refund" value="0">
+                    <input type="hidden" name="existing_refund" id="existing_refund" value="0">
+                    <div class="modal-body">
+                        <div class="row" >
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="row form-group amountSection">
+                                        <div class="col-md-6">
+                                            <label for="refund">Refund (Amount in Rs.)</label>
+                                            <input type="number" class="form-control" id="refund" min="0" name="refund" required/>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label for="refund_type">Refund Type</label>
+                                            <select class="form-control" id="refund_type" name="refund_type" required>
+                                                <option></option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="UPI">UPI</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <label for="refund_note">Refund Note</label>
+                                            <textarea type="text" id="refund_note" name="refund_note" class="form-control" placeholder="Notes"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary formSubmitBtn">Refund</button>
+                            </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+
+
+{% endblock %} 
+{% block extra_css %}
+<style>
+    .app-listing {
+        justify-content: inherit;
+    }
+    .multipleSelection.active .selectBox{
+        border:2px solid #7638ff
+    }
+    .MedicineRow div{
+        line-height: 1.9;
+    }
+
+    
+    .LabRow div{
+        line-height: 1.9;
+        border: 1px solid;
+    }
+
+    .MedicineRow.Head,
+    .LabRow.Head{
+        font-weight: 800;
+    }
+    .invoice-item-box {
+        float: none;
+        width: 50%;
+        margin: 10px 0px;
+    }
+    .invoice-table td,
+    .invoice-table th {
+        padding: 8px 10px !important;
+    }
+    .Invoice_AmountSection  p:last-child,
+    .IP_Payment_Section p:last-child{
+        margin-bottom: 0px;
+    }
+
+    .Doctor-History-Section .card-body{
+        background-color: #e7ebef;
+    }
+</style>
+
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/pages/manage_assign_room.js' %}" type="text/javascript"></script>
+
+{% endblock %}
+
+
+

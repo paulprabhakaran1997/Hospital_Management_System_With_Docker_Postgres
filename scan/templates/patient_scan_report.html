@@ -1,0 +1,180 @@
+{% extends 'base.html' %} 
+
+{% load static %} 
+
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="PatientScanData" data-val="{{ patientscanreportdata }}">
+    <input type="hidden" id="PatientData" data-val="{{ patientdata }}">
+
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Scan Test Report</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Scan Test Report</li>
+                </ul>
+            </div>
+            <div class="col-auto ">
+                <a href="{% url 'scan_from_appointment' %}" class="btn btn-primary me-1 ">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            <div class="col-auto printBtnSection ">
+                <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold printBtn DownloadReport">
+                    <i class="fas fa-print"></i> Print
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row PatientTesting_PrintView ">
+        <div class="col-md-8 mx-auto ">
+            <div class="card p-3">
+                <div class="card-body canvas_div_pdf print_section  p-1">
+                    <div class="invoice-item">
+                        <div class="row">
+                            <div class="row" style="width: 100%;">
+                                 
+                                <div class="col-md-12 mx-auto d-flex justify-content-center">
+                                    <div class="print_logo">
+                                        <img src="/media/{{ configuration.hospital_logo }}" alt="Logo" style="width: 150px;">
+                                    </div> 
+                                    <div class="print_contact text-center">
+                                        <h2 class="hospital_name mb-0">{{ configuration.hospital_name }}</h2>
+                                        <h4 class="hospital_slogan"> ({{ configuration.hospital_slogan }})</h4>
+                                        <h6 class="hospital_address mb-1"> {{ configuration.hospital_address1 }}</h6>
+                                        <h6 class="hospital_address mb-1"> {{ configuration.hospital_address2 }}-{{ configuration.hospital_pincode }}</h6>
+                                        <h6 class=""> 
+                                            <span class="hospital_phone">Ph: {{ configuration.hospital_phone }},</span> 
+                                            <span class="hospital_email">E-Mail: {{ configuration.hospital_email }}</span> 
+                                        </h6>
+                                    </div>
+                                        
+                                   
+                                </div>                               
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="invoice-item" style="background: #f7f7ff;border: 1px solid #efefff;border-radius: 10px; margin-top: 5px;">
+                        <div class="row m-0">
+                            <table>
+                                <tbody style="border: #ffffff00;">
+                                    <tr>
+                                        <td>
+                                            <div class="invoice-info pb-2 pt-2 mb-0">
+                                                <p class=""><b class="customer-text mb-1">Report To</b></p>
+                                                <p class="" style="margin-left:20px;">
+                                                    <b>ID:<span class="patient_ID"></span><br>
+                                                    Name: <span  class="patient_Name"></span> (<span class="patient_Age"></span>Yrs / <span class="patient_Gender"></span>) <br>
+                                                    Doctor Name: <span class="patient_Doctor"></span></b>
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="invoice-info pb-2 pt-2 mb-0" style="text-align: end;">
+                                                <p>&nbsp;</p>
+                                                <p>Date: <strong><span class="testing_Date"></span></strong><br>
+                                                Test ID: <strong><span class="testing_id"></span></strong><br>                                        
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                    </div>
+                    
+                    
+
+                    <div class="invoice-item-box mx-auto mt-2">
+                        <h5 class="mb-0 text-center">Scan Report</h5>
+                    </div>
+
+
+                    <div class="row form-group py-4 pt-1 m-0">
+                        <table>
+                            <thead>
+                                <th style="width: 30%;">Scan Name</th>
+                                <th style="width: 70%;">Value</th>
+                            </thead>
+                            <tbody class="ReportDetails">
+
+                            </tbody>
+
+                        </table> </div>
+
+                    <div class="row form-group mt-5">
+                        <div class="col-md-6" style="width:50%;">
+                           
+                        </div>
+
+                        <div class="col-md-6" style="width:50%; text-align: center;">
+                            <h6>Scan Incharge</h6>
+                            <!-- <h6>S.AJOSE RUBAN MSC - Microbiology</h6> -->
+                        </div>
+
+                    </div>
+
+                </div>
+
+           
+            
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}{% block extra_css %}
+<style>
+    .invoice-item-box {
+        float: none;
+        width: 50%;
+    }
+     td, tfoot, th, thead, tr{
+        border-width: 1px;
+        padding: 3px 5px;
+    }
+    th{
+        text-align: center;
+    }
+    .GroupName{
+        font-weight: 800;
+    }
+
+    .print_section .hospital_name{
+        font-size: 50px;
+        color: red;
+        font-weight: 800;
+        text-shadow: -1px -1px 0 #e1e0e0, 1px -1px 0 #e1e0e0, -1px 1px 0 #e1e0e0, 1px 1px 0 #e1e0e0;
+    }
+
+    .print_section .hospital_slogan{
+        color: #0206bf;
+    }
+    .print_section .hospital_address{
+        color: #2024dd;
+    }
+    .print_section .hospital_phone, .print_section .hospital_email{
+        color: #ff0000;
+    }
+    
+</style>
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/patient_scan_report.js' %}" type="text/javascript"></script>
+
+{% endblock %}

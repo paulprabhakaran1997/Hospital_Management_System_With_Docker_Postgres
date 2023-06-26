@@ -1,0 +1,1271 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block appointment_nav %} active {% endblock %}
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="DoctorData" data-val="{{ doctordata }}">
+    <input type="hidden" id="get_doctor_data" data-url="{% url 'get_doctor_data' %}">
+
+    <!-- <input type="hidden" id="GetAppointmentDataUrl" data-url="{% url 'get_appointment_data' %}"> -->
+
+    <input type="hidden" id="GetTodaysAppointmentDataUrl" data-url="{% url 'get_todays_appointment_data' %}">
+
+    <input type="hidden" id="GetPendingPaymentForOpData" data-url="{% url 'get_pending_payment_for_op_data' %}">
+
+    <input type="hidden" id="CancelAppointmentUrl" data-url="{% url 'cancel_appointment' %}">
+
+    <input type="hidden" id="GetPaymentUrl" data-url="{% url 'get_op_payment' %}">
+
+    <input type="hidden" id="GetPatientDataOnSearch" data-url="{% url 'get_patient_data_onsearch' %}">
+
+    <input type="hidden" id="PatientUrl" data-url="{% url 'patient' %}">
+    
+    <input type="hidden" id="GetAmountDataUrl" data-url="{% url 'get_amount_data' %}">
+
+    <input type="hidden" id="get_room_data_url" data-url="{% url 'get_room_data' %}">
+
+    <input type="hidden" id="LabGroupData" data-val="{{ groupdata }}">
+
+    <input type="hidden" id="lt_from_appointment" data-url="{% url 'lt_from_appointment' %}">
+
+    <input type="hidden" id="LabTest_Data_Url" data-url="{% url 'get_lab_test_data' %}">
+
+    <input type="hidden" id="lab_payment" data-url="{% url 'lab_payment' %}">
+
+    <input type="hidden" id="GetPatientBalanceDataUrl" data-url="{% url 'get_patient_balance_data' %}">
+
+
+
+
+
+
+
+    <!-- Vinish Design -->
+    <div class="card bg-white">
+        
+        <div class="card-body">
+            <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                <li class="nav-item"><a class="nav-link active" href="#TodayOutPAtientsTab"
+                        data-bs-toggle="tab">Today's OP</a></li>
+                <li class="nav-item"><a class="nav-link" href="#OutPatientsHistory"
+                        data-bs-toggle="tab">Payment Pending For OP</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div class="tab-pane show active" id="TodayOutPAtientsTab">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="page-title">Out-Patient(O.P)</h4>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Out-Patient(O.P)</li>
+                            </ul>
+                        </div>
+
+            
+                        <div class="col-auto addNewBtnSection">
+
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 " id="direct_test">
+                                <i class="fa fa-bars"></i> New Lab
+                            </a>
+
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 newPatientBtn" data-toggle="modal" data-target="#newPatientFormModal">
+                                <i class="fas fa-user-plus"></i> New Patient
+                            </a>
+
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn newAppointmentBtn">
+                                <i class="fas fa-plus"></i> New Appointment
+                            </a>
+                        </div>
+            
+                        <div class="col-auto todayOpPrintBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold printBtn DownloadReport">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+                        </div>
+    
+                        <div class="col-auto todayOpBackBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 todayOpBackBtn">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+    
+                    </div>
+    
+                    <section class="appointmentListDTSection">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card card-table">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-center table-hover" id="appointmentListDT">
+                                                <thead class="thead-light"></thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </tfoot>
+                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card card-table">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-center table-hover" id="direct_lab_sacn_dt">
+                                                <thead class="thead-light"></thead><tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+
+                </div>
+
+                <div class="tab-pane" id="OutPatientsHistory">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="page-title">Payment Pending For OP</h4>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Payment Pending For OP</li>
+                            </ul>
+                        </div>
+                        
+    
+                        <div class="col-auto pendingContainerPrintBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold pendingContainerPrintBtn DownloadReport">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+                        </div>
+    
+                        <div class="col-auto pendingContainerBackBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 pendingContainerBackBtn">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+    
+                        
+                        
+                    </div>
+    
+                    <section class="paymentPendingAppointmentListDTSection">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card card-table">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-center table-hover" id="paymentPendingAppointmentListDT">
+                                                <thead class="thead-light"></thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </tfoot>
+                
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Vinish Design -->
+
+
+    <div class="modal" id="newPatientFormModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Patient</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+
+                <form action="javascript:void(0)" method="post" id="newPatientForm">{% csrf_token %}
+
+                    <input type="hidden" id="newPatientId" name="newPatientId" value="0">
+                    <input type="hidden" id="posId" name="posId" value="0">
+
+                    <div class="modal-body">
+
+                        <div id="newPatientSection">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" id="name" name="name" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="gender">Gender</label>
+                                        <select class="form-control" id="gender" name="gender" required>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="age">Age</label>
+                                                <input type="number" min="0" id="age" name="age"  class="form-control numberInput" required >
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="month">Months</label>
+                                                <input type="number" min="0" max="11" id="month" name="month" value="0" class="form-control numberInput">
+                                                <input type="date" id="dateofbirth" name="dateofbirth" value="0" class="form-control hide">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="father_name">Father Name</label>
+                                        <input type="text" id="father_name" name="father_name" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone">Phone</label>
+                                        <input type="text" id="phone" name="phone" class="form-control"  maxlength="10">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" id="address" name="address" class="form-control" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary formSubmitBtn">Add Patient</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="patient_Select2_Section hide">
+        <div class="row form-group">
+            <div class="col-md-12">
+
+                <div class="col-sm-12">
+                    <!-- <div class="col-sm-12">
+                            <select name="patient_name" id="patient_name" class="form-control" required></select>
+                                                </div> -->
+                    <div class="row patient_select2">
+                        <div class="col-md-6">
+                            <label for="patient_name">Select Patient</label>
+                            <input type="text" class="form-control" name="patient_typeahead"
+                                id="patient_typeahead">
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <h5>Date : <span class="patientInfoText" id="appointedDate"></span></h5>
+                            <h4 >Balance : <span id="patientBalanceAmount">0</span></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-group patientDetailsSection">
+
+            <div class="col-md-12" style="padding-right: 0px;">
+                <strong class="invoice-name ">Patient Id : <span class="patientInfoText"
+                        id="appointedPatientId"></span></strong>
+            </div>
+
+            <div class="col-md-12" style="padding-right: 0px;">
+                <strong class="customer-text-one">Patient Name :
+                    <span class="patientInfoText" id="appointedPatientName"></span> <small>[
+                        <span class="patientInfoText" id="appointedPatientAge"></span> Yrs/
+                        <span class="patientInfoText"
+                            id="appointedPatientGender"></span>]</small>
+                </strong>
+            </div>
+
+
+        </div>
+    </div>
+
+    <section class="appointmentInfoSection">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body patientDetailsSection">
+                        <form id="addAppointmentForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                            <input type="hidden" id="from_op" name="from_op" value="from_appointment" />
+
+
+                            <input type="hidden" id="appointmentId" name="appointmentId" value="0" />
+
+                            <input type="hidden" name="patientId" id="patientId" value="0">
+
+                            <input type="hidden" name="is_emergency_val" id="is_emergency_val" value="false">
+
+                            <input type="hidden" id="health_checkup_master_created" name="health_checkup_master_created" value="0" />
+
+
+                            <div class="patientDetailsSection mt-5" style="display: none;">
+
+                                <div class="row form-group">
+                                    <div class="col-md-3">
+                                        <label for="is_emergency">Is emergency</label>
+                                        <div class="col-sm-12">
+                                            <input type="checkbox" name="is_emergency" id="is_emergency" value="false">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="doctor">Appoint To (Doctor)</label>
+                                        <div class="col-sm-12">
+                                            <select name="doctor" id="doctor" class="form-control" required>
+                                                <option></option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 op_uploaded_report_section hide d-flex justify-content-center align-items-center">
+                                        <a href="javascript:void(0)" class="btn btn-primary me-1 newPatientBtn mt-4" data-toggle="modal" data-target="#op_uploaded_report">
+                                            <i class="fa fa-upload"></i> Upload Reports
+                                        </a>
+                                            
+                                    </div>
+                                </div>
+
+                                <div class="row form-group  doctor_checkup_master_section"></div>
+
+
+                                 <div class="row form-group hide">
+                                    <div class="col-md-3">
+                                        <label for="bp">BP</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" id="bp" name="bp" class="form-control" placeholder="BP">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="pulse">Pulse</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" id="pulse" name="pulse" class="form-control"
+                                                placeholder="Pulse">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="temperature">Temperature</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" id="temperature" name="temperature" class="form-control"
+                                                placeholder="98.4">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="rr">RR</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" id="rr" name="rr" class="form-control" placeholder="RR">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row form-group hide">
+
+                                    <div class="col-md-3">
+                                        <label for="sp_o2">SP O2</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" id="sp_o2" name="sp_o2" class="form-control"
+                                                placeholder="SP O2">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="blood_sugar">B Sugar</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" id="blood_sugar" name="blood_sugar" class="form-control"
+                                                placeholder="Blood Sugar">
+                                        </div>
+                                    </div>
+
+                                </div> 
+                                
+                                <div class="row form-group">
+                                    <div class="col-md-12">
+                                        <label for="reason">Reason</label>
+                                        <div class="col-sm-12">
+                                            <textarea id="reason" name="reason" class="form-control"
+                                                required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-end submitBtnSection createAppointmentBtnSection">
+                                    <button type="submit" class="btn btn-primary submitBtn createAppointmentBtn">
+                                        Create Appointment</button>
+                                </div>
+
+
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="appointment_GetpaymentSection hide">
+        <div class="row">
+            <div class="col-md-12">
+              
+                    <form id="Appointment_PaymentForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                        <input type="hidden" id="appointmentId" name="appointmentId" value="0" />
+
+                        <input type="hidden" name="patientId" id="patientId" value="0">
+
+                        <input type="hidden" name="lab_amount" id="lab_amount" value="0">
+
+                        <input type="hidden" name="xray_amount" id="xray_amount" value="0">
+
+                        <input type="hidden" name="scan_amount" id="scan_amount" value="0">
+
+                        <!-- <input type="hidden" name="doctor_fees" id="doctor_fees" value="0">
+                        <input type="hidden" name="dressing" id="dressing" value="0">
+                        <input type="hidden" name="neb" id="neb" value="0"> -->
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="card-body alert alert-success alert-dismissible mb-0">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="text-left">
+                                            
+                                                    <h4 class="text-dark">Patient Name: <span class="patientInfoText appointedPatientName"></span></h4>
+                                                    <h6 class="text-dark">
+                                                        Age & Gender: <span class="patientInfoText appointedPatientAge"></span> Yrs/
+                                                        <span class="patientInfoText appointedPatientGender"></span>
+                                                    </h6>
+                                                    <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id=""></span></h6>
+                                                    <h6 class="text-dark">Place: <span class="patientInfoText appointedPatientPlace"></span></h6>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <h4 class="text-danger">OP ID: <span class="OPAdmitID"></span></h4>
+                                                <h6>Appointment Date: <span class="appointedDate" id="appointedDate"></span></h6>
+                                                <h6>Reason: <span class="OPAdmitReason"></span></h6>
+                                                <h6>Doctor: <span class="doctor_name"></span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-7">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title">Fee Details</h5>
+                                        <h5 class="card-title" style="display: none;">Get Doctor Fees: <span id="paymentrecived_by_doctor"></span></h5>
+
+                                        
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row form-group">
+
+                                            <div class="col-md-4 mb-4">
+                                                <h6>Doctor Fee</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="doctor_fees" value="0" name="doctor_fees" class="feesAmount form-control doctor_fees" placeholder="0" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-4">
+                                                <h6>NEB</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="neb" value="0" name="dc_neb"
+                                                        class="feesAmount form-control " placeholder="0.00" >
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-4">
+                                                <h6>Dressing</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="dressing" value="0"
+                                                        name="dressing" class="feesAmount form-control " placeholder="0.00"
+                                                        >
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-4">
+                                                <h6>Injection</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="injection" value="0" name="injection"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-4">
+                                                <h6>One Touch</h6>
+                                                <div class="col-sm-12">
+                                                    <input type="number" min="0" id="one_touch" value="0" name="one_touch"
+                                                        class="feesAmount form-control" placeholder="0.00">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                    <label for="others" class="col-form-label input-label">Others</label>
+                                                    <div class="col-sm-12">
+                                                        <input type="number" min="0" id="others" value="0" name="ecg" class="feesAmount form-control" placeholder="0.00">
+                                                    </div>
+                                            </div>
+
+
+                                            <div class="col-md-4" style="margin-top: 20px;">
+                                                <h5 class="page-title">Lab Fee : ₹ <span
+                                                        class="patientInfoText Lab_fees "></span></h5>
+                                                        <span >Paid:  <span id="paid_lab_amountText"></span></span>
+                                            </div>
+                                            <div class="col-md-4" style="margin-top: 20px;">
+                                                <h5 class="page-title">X-Ray Fee : ₹ <span
+                                                        class="patientInfoText Xray_fees "></span></h5>
+                                                        <span >Paid:  <span id="paid_xray_amountText"></span></span>
+                                            </div>
+
+                                            <div class="col-md-4" style="margin-top: 20px;">
+                                                <h5 class="page-title">Scan Fee : ₹ <span
+                                                        class="patientInfoText Scan_fees "></span></h5>
+                                                        <span >Paid:  <span id="paid_scan_amountText"></span></span>
+                                            </div>
+
+                                            <hr class="my-3">
+
+                                            <div class="amountSection paymentSection mt-1 row">
+    
+                                                <div class="totalAmountView col-md-12 text-end">
+                                                    <h4 class="amountLabel text-success">Total: ₹ <span class="amountLabelValue" id="overall_totaltext">0</span></h4> 
+                                                </div>
+    
+                                                <div class="col-md-4">
+                                                    <label for="discount" class="col-form-label input-label">Discount (Amount in Rs.)</label>
+                                                    <input type="number" class="form-control discountValue" min="0" name="discount" value="0" id="discount">
+                                                </div>
+    
+                                                <div class="col-md-8 text-end">
+                                                    <br>
+                                                    <h4 class="amountLabel mt-3 text-primary">After Discount : ₹ 
+                                                    <span class="amountLabelValue" id="totalAmount_after_discountText">0</span></h4>
+                                                </div>
+                    
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="card">
+                                    <div class="card-header p-3" >
+                                        <h3 class="card-title">Get Payment</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row form-group amountSection">
+
+                                            <input type="hidden" name="totalAmount" id="totalAmount" value="0">
+                                            <input type="hidden" name="outPatientPaymentId" id="outPatientPaymentId" value="0">
+                                            <input type="hidden" name="firstPayment" id="firstPayment" value="0">
+                                            <input type="hidden" name="existing_balance" id="existing_balance" value="0">
+                                            <input type="hidden" name="balanceValue" id="balanceValue" value="0">
+                                            <input type="hidden" name="nowPayingAmount" id="nowPayingAmount" value="0">
+                                            <input type="hidden" name="paymentReceived" id="paymentReceived" value="0">
+                                            <input type="hidden" name="overallBalance" id="overallBalance" value="0">
+                                            <input type="hidden" name="overallTotal" id="overallTotal" value="0">
+                                            <input type="hidden" name="totalAmount_after_discount" id="totalAmount_after_discount" value="0">
+                                            <input type="hidden" name="discount_amount" id="discount_amount" value="0">
+                                            <input type="hidden" name="existing_discount" id="existing_discount" value="0">
+
+                                            <input type="hidden" name="totalAmount_after_refund" id="totalAmount_after_refund" value="0">
+                                            <input type="hidden" name="refund_amount" id="refund_amount" value="0">
+                                            <input type="hidden" name="existing_refund" id="existing_refund" value="0">
+
+            
+
+                                            <div class="totalAmountView col-md-12 text-center">
+                                                <h4 class="amountLabel text-success">Total: ₹ <span class="amountLabelValue" id="OP_Total_Amount">0</span></h4> 
+                                            </div>
+                                            
+                                            <hr class="my-3">
+
+                                            <div class="col-md-4 amountCollection cash_collection_col">
+                                                <label for="cash" class="col-form-label input-label">Cash</label>
+                                                <input type="number" class="form-control amountCollectionValue cashValue" min="0" name="cash" value="0" id="cash">
+                                            </div>
+            
+                                            <div class="col-md-4 amountCollection upi_collection_col">
+                                                <label for="upi" class="col-form-label input-label">UPI</label>
+                                                <input type="number" class="form-control amountCollectionValue upiValue" min="0" name="upi" value="0" id="upi">
+                                            </div>
+        
+                                            <div class="col-md-4 amountCollection card_collection_col">
+                                                <label for="card" class="col-form-label input-label">Debit Card</label>
+                                                <input type="number" class="form-control amountCollectionValue cardValue" min="0" name="card" value="0" id="card">
+                                            </div>
+        
+                                            
+            
+                                            <div class="col-md-6 existingPaidAmountView mt-3" style="display: none;">
+                                                <label class="amountLabel">Paid: ₹ <span class="amountLabelValue"
+                                                        id="existingpaidAmountText">0</span></label> <br>
+        
+                                                <label class="amountLabel">Discount: ₹ <span class="amountLabelValue"
+                                                        id="existingDiscountText">0</span></label><br>
+
+                                                <label class="amountLabel hide">Refund: ₹ <span class="amountLabelValue"
+                                                        id="existingRefundText">0</span></label>
+                                            </div>
+
+                                            <div class="col-md-6 amountSection paymentSection mt-3">
+                                                
+                                                <div class="paidAmountView col-md-12">
+                                                    <h5 class="amountLabel">Paying: ₹ 
+                                                        <span class="amountLabelValue" id="nowPayingAmountText">0</span></h5>
+                                                </div>
+                    
+                                                <div class="balanceAmountView col-md-12">
+                                                    <label class="text-danger">Balance: ₹ <span class="amountLabelValue" id="balanceAmountText">0</span></label>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- <div class="row hide" >
+                                <div class="card">
+                                    <div class="card-header p-1 d-flex justify-content-between" >
+                                        <h4 class="mt-3">Refund</h4>
+                                        <h4 class="amountLabel mt-3 text-primary">After Refund : ₹ 
+                                            <span class="amountLabelValue" id="totalAmount_after_refundText">0</span></h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row form-group amountSection">
+                                            <input type="hidden" name="totalAmount_after_refund" id="totalAmount_after_refund" value="0">
+                                            <input type="hidden" name="refund_amount" id="refund_amount" value="0">
+                                            <input type="hidden" name="existing_refund" id="existing_refund" value="0">
+
+
+
+                                            <div class="col-md-6">
+                                                <label for="refund">Refund (Amount in Rs.)</label>
+                                                <input type="number" class="form-control refundValue" min="0" name="refund" value="0" id="refund">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="refund_type">Refund Type</label>
+                                                <select class="form-control" id="refund_type" name="refund_type" >
+                                                    <option></option>
+                                                    <option value="Cash">Cash</option>
+                                                    <option value="UPI">UPI</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label for="refund_note">Refund Type</label>
+                                                <textarea type="text" id="refund_note" name="refund_note" class="form-control" placeholder="Notes"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div> -->
+                        </div>
+                    </div>
+
+
+                        <div class="text-end submitBtnSection">
+                            <button type="submit" class="btn btn-primary submitBtn">Process Payment</button>
+                        </div>
+                    </form>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="invoicePrintSection hide">
+        <div class="row justify-content-center canvas_div_pdf">
+            <div class="col-xl-8">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="invoice-item">
+                            <div class="row">
+                                <div class="col-md-6" style="width: 65%;">
+                                    <div class="invoice-logo mb-2">
+                                        {% if configuration.hospital_logo %}
+                                            <img src="/media/{{ configuration.hospital_logo }}" alt="Logo">
+                                        {% else %}
+                                            <img src="/static/img/logo.png" alt="Logo">
+                                        {% endif %}
+                                    </div>
+                                    <div class="invoice-info" style="width: 100%;">
+                                        <p class="invoice-details invoice-details-two p-2">
+                                           Life is a Gift... Live it Well...
+                                        </p>
+                                    </div>
+                                    <br>
+                                   
+                                </div>
+    
+                                <div class="col-md-6" style="width: 35%;">
+                                    <div class="invoice-info">
+                                        <p class="invoice-details">
+                                            {{ configuration.hospital_address1 }}<br> 
+                                            {{ configuration.hospital_address2 }}-{{ configuration.hospital_pincode }}<br>                                            
+                                            <strong>Ph: {{ configuration.hospital_phone }}<br>
+                                            {{ configuration.hospital_email }}</strong>
+                                        </p>
+                                    </div>
+    
+                                   
+                                </div>
+                            </div>
+
+                           <!--  <div class="row">
+                                <div class="col-md-12" style="width: 100%;">
+                                    <div class="col-md-6 mx-auto text-center">
+                                        <img src="/static/img/print-head.png" alt="Logo" style="height: 175px;">
+                                    </div>
+                                    
+                                </div>
+                            </div> -->
+                        </div>
+
+
+                        <div class="invoice-item py-4">
+                            <div class="row">
+                                <div class="col-md-6" style="width: 80%;">
+                                    <div class="invoice-info">
+                                        <strong class="customer-text mb-1">Billing Details</strong>
+                                        <p class="invoice-details invoice-details-two" style="width: 100%;">
+                                            Patient ID: <span id="invoice_PatientId"></span> <br>
+                                            Patient Name: <span id="invoice_PatientName"></span> <br>
+                                            Age & Gender: <span id="invoice_PatientAge"></span>Yrs / <span
+                                                id="invoice_PatientGender"></span>
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="width: 20%;">
+                                    <div class="invoice-details">
+                                        <strong class="customer-text mb-1">&nbsp;</strong>
+                                        <p><strong>Date:</strong> <span id="invoice_AppointementDate"></span><br>
+                                            <strong>OP ID:</strong> <span class="invoice_AppointementID"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="invoice-item invoice-table-wrap">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="table-responsive">
+                                        <table class="invoice-table table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Description</th>
+                                                    <th class="text-end">Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="OP_Invoice_Section InvoiceSection"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                               
+
+                                <div class="col-lg-6 col-md-6" style="width: 50%;">
+                                    <div class="invoice-total-card">
+                                        <div class="invoice-total-box">
+                                            <div class="invoice-total-inner">
+                                                <p style="color: #7638FF;">Payment Mode</p>
+                                                <div class="OP_Payment_Section InvoiceSection"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="invoice-total-card mt-2 Invoice_TransactionSection" >
+                                        <div class="invoice-total-box">
+                                            <div class="invoice-total-inner">
+                                                <p style="color: #7638FF;">Transaction Info</p>
+                                                <p>Paid <span class="Invoice_Paid">0</span></p>
+                                                <p class="mb-0">Balance <span class="Invoice_Balance">0</span></p>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-lg-6 col-md-6" style="width: 50%;">
+                                    <div class="invoice-total-card">
+                                        <div class="invoice-total-box">                                            
+                                            <div class="invoice-total-inner Invoice_AmountSection InvoiceSection"></div>
+                                            <div class="invoice-total-footer Invoice_AmountTotal InvoiceSection"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Direct Lab Section -->
+
+    <section class="Lab_Testing_Section hide">
+
+        <div class="col-md-12">
+            <form id="Lab_Report_Form" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                <input type="hidden" name="patientId" id="patientId" value="0">
+
+                <input type="hidden" name="returnLabTestPatient_Id" id="returnLabTestPatient_Id" value="0">
+                <input type="hidden" id="direct_labtest_Id" name="direct_labtest_Id" value="0" />
+                <input type="hidden" name="LabTestId" id="LabTestId" value="0" />
+
+                <div class="row show_patient_details mb-3">
+                    <div class="col-md-12">
+
+                        <div class="card-body alert alert-success alert-dismissible mb-0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="text-left">
+                                
+                                        <h4 class="text-dark">Patient Name: <span class="patientInfoText appointedPatientName"></span></h4>
+                                        <h6 class="text-dark">
+                                            Age & Gender: <span class="patientInfoText appointedPatientAge"></span> Yrs/
+                                            <span class="patientInfoText appointedPatientGender"></span>
+                                        </h6>
+                                        <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id=""></span></h6>
+                                        <h6 class="text-dark">Place: <span class="patientInfoText appointedPatientPlace"></span></h6>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <h4 class="text-danger">ID: <span class="OPAdmitID"></span></h4>
+                                    <h6>Appointment Date: <span class="appointedDate" id="appointedDate"></span></h6>
+                                    <h6>Reason: <span class="OPAdmitReason"></span></h6>
+                                    <h6>Doctor: <span class="doctor_name"></span></h6>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="patientDetailsSection" style="margin-bottom:15px">
+
+                    <div class="row m-0 test_shoud_take">
+
+                        <div class="col-md-6 mb-3 mt-2">
+                            <h5>Select Test</h5>
+                            <select name="lab_select2" id="lab_select2" class="form-control" placeholder="Select Test"
+                                multiple required></select>
+                        </div>
+
+                        <div class="col-md-6 mb-3 mt-2 doctor_direct_test">
+                            <h5>Docter Name</h5>
+                            <input type="text" class="form-control" name="doctor_direct_test" id="doctor_direct_test"
+                                placeholder="Enter Doctor Name">
+                        </div>
+
+                    </div>
+
+                    <section class="direct_lab_GetpaymentSection">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <form id="Direct_Lab_PaymentForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                                    <div class="row form-group" style="display:flex; justify-content: center;">
+
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <h5 class="card-title">Payment Details</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+
+                                                    <div class="row form-group amountSection">
+                                                        <input type="hidden" name="outPatientPaymentId"
+                                                            id="outPatientPaymentId" value="0">
+                                                        <input type="hidden" name="direct_totalAmount"
+                                                            id="direct_totalAmount" value="0">
+                                                        <input type="hidden" name="direct_balanceValue"
+                                                            id="direct_balanceValue" value="0">
+                                                        <input type="hidden" name="direct_nowPayingAmount"
+                                                            id="direct_nowPayingAmount" value="0">
+                                                        <input type="hidden" name="direct_paymentReceived"
+                                                            id="direct_paymentReceived" value="0">
+                                                        <input type="hidden" name="direct_overallBalance"
+                                                            id="direct_overallBalance" value="0">
+                                                        <input type="hidden" name="direct_discount_amount"
+                                                            id="direct_discount_amount" value="0">
+                                                        <input type="hidden" name="direct_total_after_discount"
+                                                            id="direct_total_after_discount" value="0">
+
+
+                                                        <div class="col-md-12 amountCollection cash_collection_col mb-2">
+                                                            <h6 class="">Cash</h6>
+                                                            <input type="number"
+                                                                class="form-control direct_amountCollectionValue cashValue"
+                                                                min="0" name="cash" value="0" id="direct_cash">
+                                                        </div>
+
+                                                        <div class="col-md-6 amountCollection upi_collection_col mb-4">
+                                                            <h6 class="">UPI</h6>
+                                                            <input type="number"
+                                                                class="form-control direct_amountCollectionValue upiValue"
+                                                                min="0" name="upi" value="0" id="direct_upi">
+                                                        </div>
+
+                                                        <div class="col-md-6 amountCollection upi_collection_col mb-4">
+                                                            <h6 class="">Debit Card</h6>
+                                                            <input type="number"
+                                                                class="form-control direct_amountCollectionValue cardValue"
+                                                                min="0" name="upi" value="0" id="direct_card">
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label for="discount"
+                                                                class="col-form-label input-label">Discount (Amount
+                                                                inRs.)</label>
+                                                            <input type="number" class="form-control direct_discountValue"
+                                                                min="0" name="discount" value="0" id="direct_discount">
+                                                        </div>
+                                                        <div class="col-md-6 text-align-right">
+
+                                                            <div class="amountSection paymentSection row">
+                                                                <div class="totalAmountView col-md-12  mb-3">
+                                                                    <h3 class="amountLabel">Total Fees: ₹ <span
+                                                                            class="amountLabelValue"
+                                                                            id="direct_totalAmountText">0</span></h3>
+                                                                </div>
+
+                                                                <div class="paidAmountView col-md-6">
+                                                                    <h6 class="amountLabel">Now Paying<span
+                                                                            class="text-success pull-right">
+                                                                            ₹ <span class="amountLabelValue"
+                                                                                id="direct_nowPayingAmountText">0</span></span>
+                                                                    </h6>
+                                                                    <h6 class="amountLabel">Balance<span
+                                                                            class="text-danger pull-right"> ₹
+                                                                            <span class="amountLabelValue"
+                                                                                id="direct_balanceAmountText">0</span></span>
+                                                                    </h6>
+                                                                </div>
+
+                                                                <div class="col-md-6 direct_existingPaidAmountView hide">
+                                                                    <h6 class="amountLabel">Already Paid<span class="text-success pull-right">₹ <span class="amountLabelValue" id="direct_existingpaidAmountText">0</span></span></h6>
+                                                                    <h6 class="amountLabel direct_discount_section">Discount<span class="pull-right">₹ <span class="amountLabelValue" id="direct_existingdiscountAmountText">0</span></span></h6>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-md-6 discount_section">
+                                                            <h4 class="amountLabel text-primary">Total After Discount : ₹
+                                                                <span class="amountLabelValue"
+                                                                    id="direct_totalAmount_after_discountText">0</span>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary direct_submitBtn">Proceed</button>
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+
+
+
+
+
+
+    <div class="modal" id="refundModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Refund Details</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+
+                <form action="{% url 'op_refund' %}" method="post" id="OP_refundForm">{% csrf_token %}
+                    <input type="hidden" name="op_id_for_refund" id="op_id_for_refund" value="0">
+                    <input type="hidden" name="existing_refund" id="existing_refund" value="0">
+                    <div class="modal-body">
+                        <div class="row" >
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="row form-group amountSection">
+                                        <div class="col-md-6">
+                                            <label for="refund">Refund (Amount in Rs.)</label>
+                                            <input type="number" class="form-control" id="refund" min="0" name="refund" required/>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label for="refund_type">Refund Type</label>
+                                            <select class="form-control" id="refund_type" name="refund_type" required>
+                                                <option></option>
+                                                <option value="Cash">Cash</option>
+                                                <option value="UPI">UPI</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <label for="refund_note">Refund Note</label>
+                                            <textarea type="text" id="refund_note" name="refund_note" class="form-control" placeholder="Notes"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary formSubmitBtn">Refund</button>
+                            </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="TransferFormModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer Details</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+
+                <form action="{% url 'transfer_OP_TO_IP' %}" method="post" id="TransferForm">{% csrf_token %}
+
+                    <input type="hidden" id="transfer_OP_id" name="transfer_OP_id" value="0">
+                    <input type="hidden" id="transfer_patient_id" name="transfer_patient_id" value="0">
+                    <input type="hidden" id="from_op_balance" name="from_op_balance" value="0" >
+
+                    <div class="modal-body">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label for="room" class="col-form-label input-label">Room No</label>
+                                    <select name="room" class="room" class="form-control" required></select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="assigned_date" class="col-form-label input-label">Assigned Date</label>
+                                    <input type="datetime-local" name="assigned_date" id="assigned_date"  value='{% now "Y-m-d H:i" %}' class="form-control" required>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="transfer_reason" class="col-form-label input-label">Reason</label>
+                                    <textarea type="text" rows="2" id="transfer_reason" name="transfer_reason" class="form-control"  placeholder="Enter Reason" required></textarea>
+                                </div>
+
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary formSubmitBtn">Transfer</button>
+                            </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="op_uploaded_report">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Report</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+
+                <form action="{% url 'op_upload_report' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                    <input type="hidden" id="op_id_for_upload_report" name="op_id_for_upload_report" value="0">
+                    <div class="modal-body">
+                            <div class="row mb-2">
+                                <div class="col-md-12">
+                                    <p class="text-muted mb-0">Allowed JPG or PNG. Max size of 1MB</p>
+                                    <label for="upload_image" class="btn btn-secondary" style="width: 100%;">
+                                        <input type="file" accept="image/png, image/gif, image/jpeg, image/*" id="upload_image" name="upload_image" multiple required>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary formSubmitBtn">Add</button>
+                            </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+   .modal-ku {
+  width: 150%;
+  margin: auto;
+}
+</style>
+
+{% endblock %}
+{% block extra_js %}
+
+
+
+<script src="{% static 'js/pages/add_appointment.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/pages/direct_patient_appointment.js' %}" type="text/javascript"></script>
+
+
+
+{% endblock %}

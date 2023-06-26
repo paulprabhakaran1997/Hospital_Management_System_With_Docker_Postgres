@@ -1,0 +1,148 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block upload_reports_nav %} active {% endblock %} 
+{% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="GetPatientDataOnSearch" data-url="{% url 'get_patient_data_onsearch' %}">
+    <input type="hidden" id="GetUploadedReports" data-url="{% url 'get_uploaded_reports' %}">
+    <input type="hidden" id="GetUploadedReportsFiles" data-url="{% url 'get_uploaded_reports_files' %}">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Upload Reports</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Upload Reports</li>
+                </ul>
+            </div>
+
+            <div class="col-auto uploadNewBtnSection view1">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn uploadNewBtn">
+                    <i class="fas fa-plus"></i> Upload New
+                </a>
+            </div>
+
+            <div class="col-auto backBtnSection  view2 hide">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 backbtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    <section class="row uploadReportsContainer card filter-card hide">
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form id="uploadReportsForm" action="." method="POST" enctype="multipart/form-data">{% csrf_token %}
+                        
+                        <input type="hidden" name="patientId" id="patientId" value="0">
+
+                        <div class="row mt-3">
+                            <div class="col-md-6 mx-auto text-center">
+                                <label for="patient_name">Select Patient</label>
+                                <input type="text" class="form-control" name="patient_typeahead"
+                                    id="patient_typeahead">
+                            </div>
+
+                            <div class="patientDetailsSection" style="display: none;">
+                                <div class="col-md-12 text-center">
+                                    <strong class="invoice-name ">Patient Id : <span class="patientInfoText"
+                                            id="appointedPatientId"></span></strong>
+                                </div>
+    
+                                <div class="col-md-12 text-center">
+                                    <strong class="customer-text-one">Patient Name :
+                                        <span class="patientInfoText" id="appointedPatientName"></span> <small>[
+                                            <span class="patientInfoText" id="appointedPatientAge"></span> Yrs/
+                                            <span class="patientInfoText"
+                                                id="appointedPatientGender"></span>]</small>
+                                    </strong>
+                                </div>
+
+                                <div class="col-md-12 text-center">
+                                    <div class="button-wrapper">
+                                        <label for="imageInput" class="btn btn-secondary me-2 mb-4">
+                                            <input type="file" accept="image/png, image/gif, image/jpeg, image/*"
+                                                class="imageInput" name="imageInput" multiple required>
+                                        </label>
+                                        <p class="text-muted mb-0">Allowed JPG or PNG. Max size of 1MB</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mx-auto  text-center">
+                                    <label for="reportName" class="col-form-label input-label">Report Name</label>
+                                    <input type="text" name="reportName" id="reportName" class="form-control" />
+                                </div>
+
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-success uploadBtn">Upload</button>
+                                </div>
+
+                            </div>
+
+                            
+
+                            
+                        </div>
+        
+        
+        
+                        <div class="row imageUploadSection">
+                            
+                        </div>
+        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="uploadReportsDTContianer  view1">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="uploadReportsDT">
+                                <thead class="thead-light"></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reportViewContainer  view2 hide">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title reportTitle">Reports</h1>
+            </div>
+            <div class="card-body">
+                <div class="row reportView">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+{% endblock %} {% block extra_js %}
+
+
+<script src="{% static 'js/pages/upload_reports.js' %}" type="text/javascript"></script>
+
+
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block home_nav %} active {% endblock %}
+
+{% block main_content %}
+
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon bg-1">
+                            <i class="fas fa-users"></i>
+                        </span>
+                        <div class="dash-count">
+                            <div class="dash-title">Today Out-Patients </div>
+                            <div class="dash-counts">
+                                <p>{{today_op}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress progress-sm mt-3">
+                        <div class="progress-bar bg-5" role="progressbar" style="width: 75%"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <!-- <p class="text-muted mt-3 mb-0"><span class="text-danger me-1"><i
+                                class="fas fa-arrow-down me-1"></i>1.15%</span> since last week</p> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon bg-2">
+                            <i class="fas fa-bed"></i>
+                        </span>
+                        <div class="dash-count">
+                            <div class="dash-title">Current In-Patients</div>
+                            <div class="dash-counts">
+                                <p>{{current_ip}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress progress-sm mt-3">
+                        <div class="progress-bar bg-6" role="progressbar" style="width: 65%"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <!-- <p class="text-muted mt-3 mb-0"><span class="text-success me-1"><i
+                                class="fas fa-arrow-up me-1"></i>2.37%</span> since last week</p> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon bg-3">
+                            <i class="fas fa-user-friends"></i>
+                        </span>
+                        <div class="dash-count">
+                            <div class="dash-title">Today OP & IP</div>
+                            <div class="dash-counts">
+                                <p>{{today_op_and_current_ip}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress progress-sm mt-3">
+                        <div class="progress-bar bg-7" role="progressbar" style="width: 85%"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <!-- <p class="text-muted mt-3 mb-0"><span class="text-success me-1"><i
+                                class="fas fa-arrow-up me-1"></i>3.77%</span> since last week</p> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="dash-widget-header">
+                        <span class="dash-widget-icon bg-4">
+                            <i class="fas fa-rupee-sign"></i>
+                        </span>
+                        <div class="dash-count">
+                            <div class="dash-title">Amount (Today Income)</div>
+                            <div class="dash-counts">
+                                <p>Rs. {{ amount }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress progress-sm mt-3">
+                        <div class="progress-bar bg-8" role="progressbar" style="width: 45%"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <!-- <p class="text-muted mt-3 mb-0"><span class="text-danger me-1"><i
+                                class="fas fa-arrow-down me-1"></i>8.68%</span> since last week</p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="HomeTable_DTsection_room">
+        
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card card-table">
+                    <div class="card-header card-header py-3 px-3">
+                        <h4 class="mb-0">In-Patients</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="RoomTable">
+                                <thead class="thead-light">
+                                    <tr class="fw-bold">
+                                        <td>Id</td>
+                                        <td>Patient Name</td>
+                                        <td>Reason</td>
+                                        <td>Room No</td>
+                                        <td>Admit Date</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for obj in assignroom_data %}
+    
+                                    <tr>
+                                        <td data-val={{obj.id}}>{{ obj.id }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.patient_name }}<br>
+                                            <span class="text-muted">[Place: {{ obj.patient_address }}]</span>
+                                        </td>
+                                        <td data-val={{obj.id}}>{{ obj.reason }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.room_no }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.admit_date|date:"d-M-Y h:m A" }}</td>
+                                        <!-- <td>
+                                            <button type="button" class="btn btn-outline-primary EditBtn" data-val="{{ obj|safe }}" >
+                                                <i class='menu-icon tf-icons bx bx-edit'></i> Edit</button>
+                                        </td> -->
+                                    </tr>
+                                
+                                    {% endfor %}
+                                    {% for obj in assignward_data %}
+    
+                                    <tr>
+                                        <td data-val={{obj.id}}>{{ obj.id }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.patient_name }}<br>
+                                            <span class="text-muted">[Place: {{ obj.patient_address }}]</span>
+                                        </td>
+                                        <td data-val={{obj.id}}>{{ obj.reason }}</td>
+                                        <td data-val={{obj.id}}>{{ obj.bed_no }} <br><span class="text-muted">[Ward: {{ obj.ward }}] </span></td>
+                                        <td data-val={{obj.id}}>{{ obj.admit_date|date:"d-M-Y h:m A" }}</td>
+                                    </tr>
+                                
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+   
+
+</div>
+
+
+{% endblock %}
+{% block extra_css %}
+<style>
+    .card-table div.table-responsive > div.dataTables_wrapper > div.row:first-child{
+        display: none;
+    }
+</style>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/pages/index.js' %}" type="text/javascript"></script>
+{% endblock %}

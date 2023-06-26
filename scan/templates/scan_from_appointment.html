@@ -1,0 +1,639 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block scan_nav %} active {% endblock %} 
+{% block scan_from_appointment_nav %} active {% endblock %} 
+{% block main_content %}
+
+<div class="content container-fluid">
+
+    <div class="row align-items-center">
+        <div class="col-12">
+            <ul class="nav nav-pills justify-content-end" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active"  data-toggle="tab" href="#Patients_forTestTake">Pending Scan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  data-toggle="tab" href="#Patients_history">Scan History</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <section class="ScanTestSection">
+        <div class="tab-content">
+            <div class="Patients_forTestTake tab-pane active" id="Patients_forTestTake">
+    
+                <input type="hidden" id="ScanTest_Data_Url" data-url="{% url 'get_scan_test_data' %}">
+                <input type="hidden" id="GetPatientDataOnSearch" data-url="{% url 'get_patient_data_onsearch' %}">
+
+
+                <input type="hidden" id="canceling_scan_url" data-url="{% url 'canceling_scan' %}">
+                <input type="hidden" id="Scan_Result_Url" data-url="{% url 'get_scan_result_data' %}">
+                <input type="hidden" id="post_edit_scan_result_data" data-url="{% url 'post_edit_scan_result_data' %}">
+                <input type="hidden" id="get_initial_payment_data_scan" data-url="{% url 'get_initial_payment_data_scan' %}">
+
+
+
+
+                <input type="hidden" id='scandata' data-val="{{scandata}}">
+    
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="page-title">Scan Test</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Scan Test</li>
+                            </ul>
+                        </div>
+
+    
+                        <div class="col-auto backBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                        <div class="col-auto direct_scanSection ">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 " id="direct_scan">
+                                <i class="fa fa-bars"></i> New Scan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    
+                <section style="margin-bottom:35px;" class="Pending-Scan-Test-Section">
+                    <h5>Scan Test [Pending]</h5>
+                    
+                    <div class="row Scan-Test-List mt-4" ></div>
+                </section>
+
+
+                <section class="Scan_Section hide">
+    
+                    <div class="col-md-12">
+                        <form id="Scan_Report_Form" action="." method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+    
+                            <input type="hidden" name="patientId" id="patientId" value="0">
+    
+                            <input type="hidden" name="patient_appointment_Id" id="patient_appointment_Id" value="0">
+
+                            <input type="hidden" name="patient_IP_assignid" id="patient_IP_assignid" value="0">
+
+                            <input type="hidden" name="patient_Ward_assignid" id="patient_Ward_assignid" value="0">
+
+                            <input type="hidden" name="returnScanTestPatient_Id" id="returnScanTestPatient_Id" value="0">
+    
+    
+                            <div class="patientDetailsSection" style="margin-bottom:15px">
+
+                                <div class="row typeaheadSection">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row form-group patient_Select2_Section">
+                                                    <div class="col-md-6">
+                                                        <label for="patient_name">Select Patient</label>
+                                                        <input type="text" class="form-control" name="patient_typeahead" id="patient_typeahead">
+                                                    </div>
+                                                   
+                                                </div>
+                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="card-body alert alert-success  alert-dismissible  patient_data ">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="text-left">
+                                        
+                                                <h4 class="text-primary">Patient Name: 
+                                                    <span class="patientInfoText" id="appointedPatientName"></span>
+                                                    [#<span class="patientInfoText" id="appointedPatientId"></span>]
+                                                </h4>
+                                                <h6 class="text-dark">
+                                                    Age & Gender: <span class="patientInfoText" id="appointedPatientAge"></span> Yrs/
+                                                    <span class="patientInfoText" id="appointedPatientGender"></span>
+                                                </h6>
+                                                <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id="appointedPatientPhone">98876554</span></h6>
+                                                <h6 class="text-dark">Place: <span class="patientInfoText" id="appointedPatientPlace"></span></h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h4 class="text-danger"><span class="admission_id" id="admission_id"></span></h4>
+                                            <h6>Appointed Date: <span class="patientInfoText" id="appointedDate"></span></h6>
+                                            <h6>Doctor: <span class="patientInfoText" id="appointedDocter"></span></h6>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row m-0 scan_shoud_take">
+        
+                                    <div class="col-md-6 mb-3 mt-2 SuggestedScan alert alert-primary alert-dismissible fade show" role="alert">
+                                        <h5 class="mt-2">Scan to be Taken: <span class="patientInfoText text-primary"></span></h5>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3 mt-2">
+                                        <h5>Select Scan</h5>
+                                        <select name="scan_select2" id="scan_select2" class="form-control" placeholder="Select Scan" multiple required></select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3 mt-2">
+                                        <h5>Scan Fees</h5>
+                                        <input type="text" name="Scan-FeeAmount" id="Scan-FeeAmount" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3 mt-2 doctor_direct_scan">
+                                        <h5>Docter Name</h5>
+                                        <input type="text" class="form-control" name="doctor_direct_scan" id="doctor_direct_scan" placeholder="Enter Doctor Name">
+                                    </div>
+        
+                                </div>
+
+
+
+    
+                            <div class="row form-group patient_report_view" id="ReportAction">
+    
+                            </div>
+
+                            <section class="direct_scan_GetpaymentSection">
+                                <div class="row">
+                                    <div class="col-md-12"> 
+                            
+                                        <form id="Direct_Scan_PaymentForm" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                            
+                                            <div class="row form-group" style="display:flex; justify-content: center;">
+                            
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <h5 class="card-title">Payment Details</h5>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                            
+                                                            <div class="row form-group amountSection">
+                                                                <input type="hidden" name="outPatientPaymentId" id="outPatientPaymentId" value="0">
+                                                                <input type="hidden" name="direct_totalAmount" id="direct_totalAmount" value="0">
+                                                                <input type="hidden" name="direct_balanceValue" id="direct_balanceValue" value="0">
+                                                                <input type="hidden" name="direct_nowPayingAmount" id="direct_nowPayingAmount"
+                                                                    value="0">
+                                                                <input type="hidden" name="direct_paymentReceived" id="direct_paymentReceived"
+                                                                    value="0">
+                                                                <input type="hidden" name="direct_overallBalance" id="direct_overallBalance"
+                                                                    value="0">
+                                                                <input type="hidden" name="direct_discount_amount" id="direct_discount_amount"
+                                                                    value="0">
+                                                                <input type="hidden" name="direct_total_after_discount"
+                                                                    id="direct_total_after_discount" value="0">
+                            
+                            
+                                                                <div class="col-md-12 amountCollection cash_collection_col mb-2">
+                                                                    <h6 class="">Cash</h6>
+                                                                    <input type="number" class="form-control direct_amountCollectionValue cashValue"
+                                                                        min="0" name="cash" value="0" id="direct_cash">
+                                                                </div>
+                            
+                                                                <div class="col-md-6 amountCollection upi_collection_col mb-4">
+                                                                    <h6 class="">UPI</h6>
+                                                                    <input type="number" class="form-control direct_amountCollectionValue upiValue" min="0"
+                                                                        name="upi" value="0" id="direct_upi">
+                                                                </div>
+                            
+                                                                <div class="col-md-6 amountCollection upi_collection_col mb-4">
+                                                                    <h6 class="">Debit Card</h6>
+                                                                    <input type="number" class="form-control direct_amountCollectionValue cardValue"
+                                                                        min="0" name="upi" value="0" id="direct_card">
+                                                                </div>
+                            
+                                                                <div class="col-md-6">
+                                                                    <label for="discount" class="col-form-label input-label">Discount (Amount inRs.)</label>
+                                                                    <input type="number" class="form-control direct_discountValue" min="0" name="discount"
+                                                                        value="0" id="direct_discount">
+                                                                </div>
+                                                                <div class="col-md-6 text-align-right">
+                            
+                                                                    <div class="amountSection paymentSection row">
+                                                                        <div class="totalAmountView col-md-12  mb-3">
+                                                                            <h3 class="amountLabel">Total Fees: ₹ <span class="amountLabelValue"
+                                                                                    id="direct_totalAmountText">0</span></h3>
+                                                                        </div>
+                            
+                                                                        <div class="paidAmountView col-md-6">
+                                                                            <h6 class="amountLabel">Now Paying<span class="text-success pull-right">
+                                                                                    ₹ <span class="amountLabelValue"
+                                                                                        id="direct_nowPayingAmountText">0</span></span></h6>
+                                                                            <h6 class="amountLabel">Balance<span class="text-danger pull-right"> ₹
+                                                                                    <span class="amountLabelValue"
+                                                                                        id="direct_balanceAmountText">0</span></span></h6>
+                                                                        </div>
+                            
+                                                                    </div>
+                            
+                                                                </div>
+                                                                <div class="col-md-6 discount_section">
+                                                                    <h4 class="amountLabel text-primary">Total After Discount : ₹
+                                                                        <span class="amountLabelValue"
+                                                                            id="direct_totalAmount_after_discountText">0</span>
+                                                                    </h4>
+                                                                </div>
+                                                            </div>
+                            
+                                                        </div>
+                            
+                                                    </div>
+                            
+                            
+                                                </div>
+                                            </div>
+                            
+                            
+                                        </form>
+                            
+                                    </div>
+                                </div>
+                            </section>
+    
+    
+                            <div class="text-end submitBtnSection">
+                                <button type="submit" class="btn btn-primary submitBtn">Proceed</button>
+                            </div>
+    
+    
+                        </div>
+    
+                        </form>
+                    </div>
+                </section>
+    
+            </div>
+    
+    
+    
+            <div class="Patients_history tab-pane" id="Patients_history">
+
+                <input type="hidden" id="ScanForPatientData" data-val="{{ scanforpatientdata }}">
+
+                <input type="hidden" id="scan_payment" data-url="{% url 'scan_payment' %}">
+
+
+                <div class="page-header">
+                    <div class="row align-items-center">
+
+                        <div class="col">
+                            <h3 class="page-title">Scan From Appointment</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">Scan From Appointment</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-auto history_backBtnSection hide">
+                            <a href="javascript:void(0)" class="btn btn-primary me-1 history_backBtn">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+
+                        <div class="col-auto printBtnSection hide ">
+                            <a href="javascript:void(0)" class="btn btn-outline-primary me-1 bold  printBtn Payment_DownloadReport">
+                                <i class="fas fa-print"></i> Print
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            
+                <section class="ScanPatientDTSection">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card card-table">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-center table-hover" id="scanPatientListDT">
+                                            <thead class="thead-light">
+                                                
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="patient_info_section hide" >
+                    <div class="card-body alert alert-success   alert-dismissible  patient_data ">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="text-left">
+                            
+                                    <h4 class="text-primary">Patient Name: 
+                                        <span class="patientInfoText appointedPatientName" id="appointedPatientName"></span>
+                                        [#<span class="patientInfoText appointedPatientId" id="appointedPatientId"></span>]
+                                    </h4>
+                                    <h6 class="text-dark">
+                                        Age & Gender: <span class="patientInfoText appointedPatientAge" id="appointedPatientAge"></span> Yrs/
+                                        <span class="patientInfoText appointedPatientGender" id="appointedPatientGender"></span>
+                                    </h6>
+                                    <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id="appointedPatientPhone"></span></h6>
+                                    <h6 class="text-dark">Place: <span class="patientInfoText appointedPatientPlace" id="appointedPatientPlace"></span></h6>
+                                </div>
+                            </div>
+                            <div class="col-6 text-end AppointmentDetails">
+                                <h4 class="text-danger"><span class="admission_id" id="admission_id"></span></h4>
+                                <h6>Appointed Date: <span class="patientInfoText appointedDate" id="appointedDate"></span></h6>
+                                <h6>Doctor: <span class="patientInfoText appointedDoctor" id="appointedDocter"></span></h6>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="edit_scan_section hide">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="Edit_Scan_Report_Form"  method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                <div class="row form-group patient_report_view" id="SubView">
+                
+                                </div>
+
+                                <div class="text-end submitBtnSection">
+                                    <button type="submit" class="btn btn-primary submitBtn">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="scan_GetpaymentSection hide">
+                    <!-- <div class="row">
+                        <div class="col-md-12">
+                    
+                            <form id="Scan_PaymentForm"  method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                                <input type="hidden" id="op_appointmentId" name="appointmentId" value="0" />
+                            <div class="row form-group" style="display:flex; justify-content: center;">
+
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="card-title">Payment Details</h5> 
+                                            </div>                                       
+                                            </div>
+                                        <div class="card-body">
+                                            
+                                            <div class="row" >
+                                                <div class="row form-group amountSection">
+                                                    <input type="hidden" name="outPatientPaymentId" id="outPatientPaymentId"
+                                                        value="0">
+                                                    <input type="hidden" name="totalAmount" id="totalAmount" value="0">
+                                                    <input type="hidden" name="balanceValue" id="balanceValue" value="0">
+                                                    <input type="hidden" name="nowPayingAmount" id="nowPayingAmount" value="0">
+                                                    <input type="hidden" name="paymentReceived" id="paymentReceived" value="0">
+                                                    <input type="hidden" name="overallBalance" id="overallBalance" value="0">
+
+                                                    <input type="hidden" name="ScanTestId" id="ScanTestId" value="0" />
+
+                                                    <div class="col-md-12 amountCollection cash_collection_col mb-2">
+                                                        <h6 class="">Cash</h6>
+                                                        <input type="number" class="form-control amountCollectionValue cashValue" min="0" name="cash" value="0" id="cash">
+                                                    </div>
+
+                                                    <div class="col-md-6 amountCollection upi_collection_col">
+                                                        <h6 class="">UPI</h6>
+                                                        <input type="number" class="form-control amountCollectionValue upiValue" min="0" name="upi" value="0" id="upi">
+                                                    </div>
+
+                                                    <div class="col-md-6 amountCollection upi_collection_col">
+                                                        <h6 class="">Debit Card</h6>
+                                                        <input type="number" class="form-control amountCollectionValue cardValue" min="0" name="upi" value="0" id="card">
+                                                    </div>
+                                                </div>
+
+                                                <div class="amountSection paymentSection row">
+                                                    <div class="totalAmountView col-md-12 text-center mb-3">
+                                                        <h3 class="amountLabel">Total Fees: ₹ <span class="amountLabelValue" id="totalAmountText">0</span></h3>
+                                                    </div>
+
+                                                    <div class="col-md-6 existingPaidAmountView" style="display: none;">
+                                                        <h6 class="amountLabel">Already Paid<span class="text-success pull-right">₹ <span class="amountLabelValue" id="existingpaidAmountText">0</span></span></h6>
+                                                        <h6 class="amountLabel">Balance<span class="text-danger pull-right">₹ <span class="amountLabelValue" id="PrevbalanceAmountText">0</span></span></h6>
+                                                    </div>
+                                                    <div class="paidAmountView col-md-6">
+                                                        <h6 class="amountLabel">Now Paying<span class="text-success pull-right"> ₹ <span class="amountLabelValue" id="nowPayingAmountText">0</span></span></h6>
+                                                        <h6 class="amountLabel">Balance<span class="text-danger pull-right"> ₹ <span class="amountLabelValue" id="balanceAmountText">0</span></span></h6>
+                                                    </div>
+
+                                                    <div class="balanceAmountView col-md-6">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end submitBtnSection">
+                                                <button type="submit" class="btn btn-primary submitBtn">Process Payment</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+                            </form>
+                                
+                        </div>
+                    </div> -->
+                </section>
+            </div>
+    
+        </div>
+    </section>
+
+    <div class="modal" id="Scan_Payment_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Details</h5>
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal" onClick="(function(){$('#Scan_Payment_modal').modal('hide');})();">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+                    <div style="padding: 15px;">
+
+                        <div class="card-body alert alert-success   alert-dismissible  patient_data ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="text-left">
+                                
+                                        <h4 class="text-primary">Patient Name: 
+                                            <span class="patientInfoText appointedPatientName" id="appointedPatientName"></span>
+                                            [#<span class="patientInfoText appointedPatientId" id="appointedPatientId"></span>]
+                                        </h4>
+                                        <h6 class="text-dark">
+                                            Age & Gender: <span class="patientInfoText appointedPatientAge" id="appointedPatientAge"></span> Yrs/
+                                            <span class="patientInfoText appointedPatientGender" id="appointedPatientGender"></span>
+                                        </h6>
+                                        <h6 class="text-dark">Contact: <span class="appointedPatientPhone" id="appointedPatientPhone"></span></h6>
+                                        <h6 class="text-dark">Place: <span class="patientInfoText appointedPatientPlace" id="appointedPatientPlace"></span></h6>
+                                    </div>
+                                </div>
+                                <div class="col-6 text-end AppointmentDetails">
+                                    <h4 class="text-danger"><span class="admission_id" id="admission_id"></span></h4>
+                                    <h6>Appointed Date: <span class="patientInfoText appointedDate" id="appointedDate"></span></h6>
+                                    <h6>Doctor: <span class="patientInfoText appointedDoctor" id="appointedDocter"></span></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="Scan_PaymentForm"  method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                            <input type="hidden" id="direct_scan_Id" name="direct_scan_Id" value="0" />
+
+                            <div class="row form-group amountSection">
+                                <input type="hidden" name="outPatientPaymentId" id="outPatientPaymentId"
+                                    value="0">
+                                <input type="hidden" name="totalAmount" id="totalAmount" value="0">
+                                <input type="hidden" name="balanceValue" id="balanceValue" value="0">
+                                <input type="hidden" name="nowPayingAmount" id="nowPayingAmount" value="0">
+                                <input type="hidden" name="paymentReceived" id="paymentReceived" value="0">
+                                <input type="hidden" name="overallBalance" id="overallBalance" value="0">
+                                <input type="hidden" name="discount_amount" id="discount_amount" value="0">
+                                <input type="hidden" name="total_after_discount" id="total_after_discount" value="0">
+
+                                <input type="hidden" name="ScanTestId" id="ScanTestId" value="0" />
+
+                                <div class="col-md-12 amountCollection cash_collection_col mb-2">
+                                    <h6 class="">Cash</h6>
+                                    <input type="number" class="form-control amountCollectionValue cashValue" min="0" name="cash" value="0" id="cash">
+                                </div>
+
+                                <div class="col-md-6 amountCollection upi_collection_col mb-4">
+                                    <h6 class="">UPI</h6>
+                                    <input type="number" class="form-control amountCollectionValue upiValue" min="0" name="upi" value="0" id="upi">
+                                </div>
+
+                                <div class="col-md-6 amountCollection upi_collection_col mb-4">
+                                    <h6 class="">Debit Card</h6>
+                                    <input type="number" class="form-control amountCollectionValue cardValue" min="0" name="upi" value="0" id="card">
+                                </div>
+
+                                <div class="col-md-6 discount_section hide">
+                                    <label for="discount" class="col-form-label input-label">Discount (Amount in Rs.)</label>
+                                    <input type="number" class="form-control discountValue" min="0" name="discount" value="0" id="discount">
+                                </div>
+                                <div class="col-md-6 text-align-right">
+
+                                    <div class="amountSection paymentSection row">
+                                        <div class="totalAmountView col-md-12  mb-3">
+                                            <h3 class="amountLabel">Total Fees: ₹ <span class="amountLabelValue" id="totalAmountText">0</span></h3>
+                                        </div>
+
+                                        <div class="paidAmountView col-md-6">
+                                            <h6 class="amountLabel">Now Paying<span class="text-success pull-right"> ₹ <span class="amountLabelValue" id="nowPayingAmountText">0</span></span></h6>
+                                            <h6 class="amountLabel">Balance<span class="text-danger pull-right"> ₹ <span class="amountLabelValue" id="balanceAmountText">0</span></span></h6>
+                                        </div>
+                                        <div class="col-md-6 existingPaidAmountView hide">
+                                            <h6 class="amountLabel">Already Paid<span class="text-success pull-right">₹ <span class="amountLabelValue" id="existingpaidAmountText">0</span></span></h6>
+                                            <h6 class="amountLabel discount_section">Discount<span class="pull-right">₹ <span class="amountLabelValue" id="existingdiscountAmountText">0</span></span></h6>
+                                        </div>
+
+
+                                        <div class="balanceAmountView col-md-6">
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6 discount_section">
+                                    <h4 class="amountLabel text-primary">Total After Discount : ₹ 
+                                    <span class="amountLabelValue" id="totalAmount_after_discountText">0</span></h4>
+                                </div>
+                            </div>
+                        <div class="text-end submitBtnSection">
+                            <button type="submit" class="btn btn-primary submitBtn">Process Payment</button>
+                        </div>
+
+
+
+
+
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+{% endblock %} 
+{% block extra_css %}
+<style>
+    .patient_report_view .card-header{
+        padding: 10px 20px;
+        border-radius: 5px !important;
+        background-color: #ababab4d !important;
+    }
+    .patient_report_view .card{
+        border: 2px solid #dbd9d9;
+        border-radius: 5px !important;
+    }
+    .patient_report_view .card-body{
+        padding-bottom: 5px;
+        padding-top: 10px;
+    }
+    .patient_report_view .card-body .summary-row{
+        margin-bottom: 10px;
+    }
+
+    .invoice-table>tbody>tr>td {
+        padding: 10px 20px;
+    }
+
+    .rounded-pill{
+        display: block;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px !important;
+        font-size: 18px;
+        box-shadow: 0px 2px 3px rgb(215 197 255);
+        border: 1px solid #e6ebf1;
+        color: #7638ff;
+        margin: 5px;
+    }
+</style>
+
+{% endblock %}
+{% block extra_js %}
+
+<script src="{% static 'js/pages/scan_from_appointment.js' %}" type="text/javascript"></script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

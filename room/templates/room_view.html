@@ -1,0 +1,134 @@
+{% extends 'base.html' %} {% load static %} {% block room__nav %} active {% endblock %} {% block room_view_nav %} active {% endblock %} {% block main_content %}
+
+
+<div class="content container-fluid">
+
+    <input type="hidden" id="room_url" data-url="{% url 'room' %}">
+    
+    <input type="hidden" id="get_room_data_url" data-url="{% url 'get_room_data' %}">
+
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Room</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Room</li>
+                </ul>
+            </div>
+            <div class="col-auto addNewBtnSection">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 addNewbtn ">
+                    <i class="fas fa-plus"></i> New 
+                </a>
+            </div>
+
+            <div class="col-auto backBtnSection hide">
+                <a href="javascript:void(0)" class="btn btn-primary me-1 backBtn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <section class="RoomView">
+        <div class="row ">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-center table-hover" id="roomListDT">
+                                <thead>
+                                    <tr class="fw-bold">
+                                        <td>Id</td>
+                                        <td>Room No</td>
+                                        <td>Room Type</td>
+                                        <td>Price</td>
+                                        <td>Description</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+        
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="RoomCreation hide">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <form id="addRoomsForm">
+
+                            <input type="hidden" id="roomId" name="roomId" value="0" />
+                        
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="room_no">Room No</label>
+                                        <input type="text" class="form-control" name="room_no" id="room_no" placeholder="Room No" required>
+                                </div>
+                        
+                                <div class="col-md-6">
+                                    <label for="room_type">Room Type</label>
+                                        <select class="form-control" id="room_type" name="room_type" required>
+                                            <option value=""></option>
+                                            <option value="Deluxe_AC">Deluxe AC</option>
+                                            <option value="Deluxe">Deluxe</option>
+                                            <option value="NonDeluxe">NonDeluxe</option>
+                                        </select>
+                                </div>
+                        
+                            </div>
+                        
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="price">Price</label>
+                                        <input type="number" min="0" class="form-control" name="price" id="price" placeholder="price" required>
+                                </div>
+                        
+                                <div class="col-md-6">
+                                    <label for="description">Description</label>
+                                        <textarea type="text" id="description" name="description" rows="2" class="form-control" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary submitBtn">Add</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</div>
+
+{% endblock %} {% block extra_js %}
+
+<script src="{% static 'js/pages/manage_room_view.js' %}" type="text/javascript"></script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
